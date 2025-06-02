@@ -1,4 +1,4 @@
-import { gameState } from "./gameState.js";
+import { gameState } from "../core/gameState.js";
 
 export const keys = {};
 export const keyPressed = {}; // Track if key was just pressed this frame

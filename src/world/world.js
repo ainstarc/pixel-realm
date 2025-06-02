@@ -7,9 +7,9 @@
  */
 
 import * as THREE from "three";
-import { materials } from "./assets.js";
-import { storage } from "./storage.js";
-import { TILE_NAMES } from "./player.js";
+import { materials } from "../core/assets.js";
+import { storage } from "../core/storage.js";
+import { TILE_NAMES } from "../player/player.js";
 
 /**
  * Generates the game world map

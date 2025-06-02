@@ -7,9 +7,9 @@
  */
 
 import * as THREE from "three";
-import { gameState } from "./gameState.js";
+import { gameState } from "../core/gameState.js";
 import { keyPressed } from "./input.js";
-import { storage } from "./storage.js";
+import { storage } from "../core/storage.js";
 
 // Track the currently highlighted tile
 let highlightedTile = null;

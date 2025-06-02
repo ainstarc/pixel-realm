@@ -22,6 +22,7 @@ A simple voxel-style world builder using Three.js.
 ## Controls
 
 ### Desktop
+
 - **WASD** or **Arrow Keys**: Move player
 - **1-4**: Select tile type (grass, dirt, sand, water)
 - **E**: Place selected tile
@@ -30,6 +31,7 @@ A simple voxel-style world builder using Three.js.
 - **⚙️ (Settings)**: Access settings menu
 
 ### Mobile
+
 - **Directional Pad**: Move player
 - **Tile Buttons**: Select tile type
 - **Place** button: Place selected tile
@@ -38,6 +40,7 @@ A simple voxel-style world builder using Three.js.
 ## Persistence
 
 The game automatically saves your progress using localStorage:
+
 - **World Map**: Saved whenever you place or modify tiles
 - **Player Position**: Saved periodically as you move around
 - **Settings**: Saved when changed
@@ -59,12 +62,14 @@ Check out the live demo at: https://ainstarc.github.io/pixel-realm/
 ## Development
 
 To run locally:
+
 ```
 npm install
 npm run dev
 ```
 
 To build for production:
+
 ```
 npm run build
 ```
@@ -74,16 +79,18 @@ npm run build
 When deploying to GitHub Pages:
 
 1. Ensure `vite.config.js` has the correct base path matching your repository name:
+
    ```javascript
    export default defineConfig({
-     base: '/pixel-realm/', // Must match your repository name
+     base: "/pixel-realm/", // Must match your repository name
      build: {
-       outDir: 'dist',
-     }
+       outDir: "dist",
+     },
    });
    ```
 
 2. Place texture files in the public folder:
+
    ```
    public/
      └── textures/
@@ -94,6 +101,7 @@ When deploying to GitHub Pages:
    ```
 
 3. Reference textures with simple paths in assets.js:
+
    ```javascript
    export const textures = {
      grass: loader.load("textures/grass.png"),
@@ -112,3 +120,37 @@ When deploying to GitHub Pages:
 ## License
 
 MIT License - See LICENSE file for details
+
+## File Structure
+
+```
+pixel-realm/
+├─ public/                    # Static assets for deployment
+│  └─ textures/               # Game textures (accessible at runtime)
+│     ├─ dirt.png
+│     ├─ grass.png
+│     ├─ sand.png
+│     └─ water.png
+├─ src/                       # Source code
+│  ├─ core/                   # Core game functionality
+│  │  ├─ assets.js            # Texture and material loading
+│  │  ├─ gameState.js         # Central game state management
+│  │  └─ storage.js           # Local storage persistence
+│  ├─ player/                 # Player-related functionality
+│  │  ├─ input.js             # Keyboard and input handling
+│  │  └─ player.js            # Player movement and interaction
+│  ├─ ui/                     # User interface components
+│  │  ├─ hud.js               # Heads-up display
+│  │  ├─ mobileControls.js    # Touch controls for mobile
+│  │  └─ settingsMenu.js      # Settings and options menu
+│  ├─ world/                  # World generation and management
+│  │  └─ world.js             # Map generation and tile handling
+│  ├─ index.js                # Entry point with module re-exports
+│  ├─ main.js                 # Main application setup
+│  └─ style.css               # Global styles
+├─ index.html                 # HTML entry point
+├─ package.json               # Project dependencies
+├─ vite.config.js             # Build configuration
+├─ CHANGELOG.md               # Version history
+└─ README.md                  # Project documentation
+```

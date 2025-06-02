@@ -2,6 +2,18 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.8.0]
+
+### Changed
+- Reorganized codebase into a modular directory structure
+  - Created core/ directory for central game functionality
+  - Created player/ directory for player-related code
+  - Created ui/ directory for interface components
+  - Created world/ directory for world generation
+- Updated import paths throughout the codebase
+- Added index.js to maintain backward compatibility
+- Improved code organization and maintainability
+
 ## [0.7.5]
 
 ### Fixed

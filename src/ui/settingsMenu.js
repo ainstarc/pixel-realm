@@ -4,7 +4,7 @@
  * Creates a settings icon and dropdown menu with various game options.
  */
 
-import { storage } from "./storage.js";
+import { storage } from "../core/storage.js";
 
 export function setupSettingsMenu() {
   // Create settings icon

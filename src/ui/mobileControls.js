@@ -5,8 +5,8 @@
  * Includes movement pad, action buttons, and tile selection.
  */
 
-import { keys, keyPressed } from "./input.js";
-import { gameState } from "./gameState.js";
+import { keys, keyPressed } from "../player/input.js";
+import { gameState } from "../core/gameState.js";
 
 // Mobile touch controls
 export function setupMobileControls() {
