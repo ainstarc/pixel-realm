@@ -1,5 +1,13 @@
 import * as THREE from "three";
 import { gameState } from "./gameState.js";
+import { keyPressed } from "./input.js";
+import { storage } from "./storage.js";
+
+// Track the currently highlighted tile
+let highlightedTile = null;
+let highlightBorder = null;
+let saveTimer = 0;
+let positionSaveTimer = 0;
 
 export function createPlayer(scene) {
   const size = 0.5;
@@ -7,8 +15,23 @@ export function createPlayer(scene) {
   const mat = new THREE.MeshStandardMaterial({ color: 0xff4444 });
 
   const player = new THREE.Mesh(geo, mat);
-  player.position.set(0, 0.3, 0);
+  
+  // Try to load saved position
+  const savedPosition = storage.loadPlayerPosition();
+  if (savedPosition) {
+    player.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
+  } else {
+    player.position.set(0, 0.3, 0);
+  }
+  
   scene.add(player);
+
+  // Create highlight border
+  const borderGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.05, 0.15, 1.05));
+  const borderMat = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 });
+  highlightBorder = new THREE.LineSegments(borderGeo, borderMat);
+  highlightBorder.visible = false;
+  scene.add(highlightBorder);
 
   return player;
 }
@@ -34,15 +57,33 @@ export function updatePlayerMovement(player, keys) {
   if (keys["a"]) nextPos.x -= speed;
   if (keys["d"]) nextPos.x += speed;
 
-  if (keys["e"] && gameState.mapData && gameState.tiles) {
+  // Highlight the current tile
+  if (gameState.mapData && gameState.tiles && gameState.materials) {
     const { x, z } = getPlayerTileIndex(player.position, 32);
-
-    // Toggle tile type (0->1 or 1->0)
-    gameState.mapData[z][x] = gameState.mapData[z][x] === 0 ? 1 : 0;
-
-    // Update tile material
-    const tile = gameState.tiles[z][x];
-    tile.material = gameState.mapData[z][x] === 0 ? gameState.materials.grass : gameState.materials.mud;
+    
+    // Make sure indices are valid
+    if (gameState.mapData[z] && gameState.mapData[z][x] !== undefined && 
+        gameState.tiles[z] && gameState.tiles[z][x]) {
+      
+      // Update highlight border position
+      const currentTile = gameState.tiles[z][x];
+      highlightBorder.position.copy(currentTile.position);
+      highlightBorder.visible = true;
+      
+      // Store current tile info
+      highlightedTile = { x, z };
+      
+      // Toggle tile type ONLY on initial 'e' key press
+      if (keyPressed["e"]) {
+        gameState.mapData[z][x] = gameState.mapData[z][x] === 0 ? 1 : 0;
+        currentTile.material = gameState.mapData[z][x] === 0 
+          ? gameState.materials.grass 
+          : gameState.materials.mud;
+          
+        // Save map data when changes are made
+        saveMapData();
+      }
+    }
   }
 
   if (keys[" "]) nextPos.y += speed; // Jump
@@ -65,4 +106,24 @@ export function updatePlayerMovement(player, keys) {
   nextPos.z = Math.max(min, Math.min(max, nextPos.z));
 
   player.position.copy(nextPos);
+  
+  // Save player position periodically
+  savePlayerPosition(player.position);
+}
+
+// Debounced save to avoid saving on every frame
+function saveMapData() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    storage.saveMapData(gameState.mapData);
+    console.log("Map data saved");
+  }, 500);
+}
+
+// Save player position with debounce
+function savePlayerPosition(position) {
+  clearTimeout(positionSaveTimer);
+  positionSaveTimer = setTimeout(() => {
+    storage.savePlayerPosition(position);
+  }, 1000); // Less frequent saves for position
 }

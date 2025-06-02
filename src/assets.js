@@ -4,7 +4,6 @@ const loader = new THREE.TextureLoader();
 
 export const textures = {
   grass: loader.load("src/assets/textures/grass.png"),
-  dirt: loader.load("src/assets/textures/dirt.png"),
   mud: loader.load("src/assets/textures/mud.png"),
 };
 

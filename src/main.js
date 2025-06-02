@@ -1,9 +1,11 @@
 import * as THREE from "three";
 import { generateMap } from "./world.js";
 import { createPlayer, updatePlayerMovement } from "./player.js";
-import { setupInput, keys } from "./input.js";
+import { setupInput, keys, resetPressedKeys } from "./input.js";
 import { materials } from "./assets.js";
 import { gameState } from "./gameState.js";
+import { storage } from "./storage.js";
+import { setupMobileControls } from "./mobileControls.js";
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -29,6 +31,31 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
 dirLight.position.set(1, 3, 2);
 scene.add(dirLight);
 
+// Add UI controls
+function addControls() {
+  const controlsDiv = document.createElement('div');
+  controlsDiv.style.position = 'absolute';
+  controlsDiv.style.top = '10px';
+  controlsDiv.style.left = '10px';
+  controlsDiv.style.color = 'white';
+  controlsDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
+  controlsDiv.style.padding = '10px';
+  controlsDiv.style.borderRadius = '5px';
+  
+  // Reset button
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset World';
+  resetBtn.onclick = () => {
+    if (confirm('Reset the world? This will clear all your changes.')) {
+      storage.clearSavedData();
+      location.reload();
+    }
+  };
+  
+  controlsDiv.appendChild(resetBtn);
+  document.body.appendChild(controlsDiv);
+}
+
 // Init
 setupInput();
 const { mapData, tiles } = generateMap(scene, 32);
@@ -39,6 +66,10 @@ gameState.tiles = tiles;
 gameState.materials = materials;
 
 const player = createPlayer(scene);
+addControls();
+
+// Setup mobile controls if on a touch device
+setupMobileControls();
 
 // Animate
 function animate() {
@@ -50,6 +81,9 @@ function animate() {
   camera.lookAt(player.position);
 
   renderer.render(scene, camera);
+  
+  // Reset one-time key presses at the end of each frame
+  resetPressedKeys();
 }
 animate();
 
