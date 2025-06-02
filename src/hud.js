@@ -1,6 +1,16 @@
+/**
+ * HUD (Heads-Up Display) module for Pixel Realm
+ * 
+ * Creates and manages the on-screen UI elements that display game information.
+ * Currently shows the selected tile type in the top-left corner.
+ */
+
 import { gameState } from "./gameState.js";
 
-// Create and manage HUD elements
+/**
+ * Sets up the HUD elements
+ * @returns {Object} - Object with update method for refreshing the HUD
+ */
 export function setupHUD() {
   // Create HUD container
   const hudContainer = document.createElement('div');
@@ -27,14 +37,22 @@ export function setupHUD() {
   hudContainer.appendChild(tileDisplay);
   document.body.appendChild(hudContainer);
   
+  // Return object with update method
   return {
+    /**
+     * Updates the HUD display with current game state
+     */
     update() {
       tileDisplay.textContent = `Selected: ${capitalizeFirstLetter(gameState.selectedTileType)}`;
     }
   };
 }
 
-// Helper function to capitalize first letter
+/**
+ * Helper function to capitalize first letter of a string
+ * @param {string} string - Input string
+ * @returns {string} - String with first letter capitalized
+ */
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }

@@ -1,3 +1,10 @@
+/**
+ * Mobile Controls module for Pixel Realm
+ * 
+ * Creates touch-friendly controls for mobile devices.
+ * Includes movement pad, action buttons, and tile selection.
+ */
+
 import { keys } from "./input.js";
 import { gameState } from "./gameState.js";
 
@@ -38,16 +45,16 @@ export function setupMobileControls() {
     btn.style.color = 'white';
     btn.style.userSelect = 'none';
     
-    // Touch events
+    // Touch events with passive: false option
     btn.addEventListener('touchstart', (e) => {
       e.preventDefault();
       keys[key] = true;
-    });
+    }, { passive: false });
     
     btn.addEventListener('touchend', (e) => {
       e.preventDefault();
       keys[key] = false;
-    });
+    }, { passive: false });
     
     return btn;
   };
@@ -66,11 +73,11 @@ export function setupMobileControls() {
     btn.style.userSelect = 'none';
     btn.style.margin = '0 5px';
     
-    // Touch events
+    // Touch events with passive: false option
     btn.addEventListener('touchstart', (e) => {
       e.preventDefault();
       gameState.selectedTileType = tileType;
-    });
+    }, { passive: false });
     
     return btn;
   };
@@ -124,6 +131,11 @@ export function setupMobileControls() {
   controlsDiv.appendChild(moveDiv);
   controlsDiv.appendChild(actionDiv);
   document.body.appendChild(controlsDiv);
+  
+  // Prevent page scrolling when touching the controls
+  controlsDiv.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
   
   // Add mobile class to body for CSS adjustments
   document.body.classList.add('mobile');

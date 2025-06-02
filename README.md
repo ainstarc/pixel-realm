@@ -4,12 +4,17 @@ A simple voxel-style world builder using Three.js.
 
 ## Features
 
-- 3D voxel-style world with grass and mud tiles
+- 3D voxel-style world with multiple tile types (grass, dirt, sand, water)
 - Player movement with WASD keys or arrow keys
-- Toggle tiles between grass and mud with the E key
+- Place different tile types with the E key
+- Tile selection system (press 1-4 to select different tiles)
+- Tile placement preview shows what will be placed before you commit
 - Jump with spacebar, crouch with shift or control
 - Highlighted tile indicator shows which tile you're standing on
-- Persistent world state using localStorage (your changes are saved!)
+- Full persistence system:
+  - World state saves automatically as you build
+  - Player position is remembered between sessions
+  - All tile types (grass, dirt, sand, water) are properly saved
 - Mobile touch controls for playing on phones and tablets
 - Reset world option to start fresh
 
@@ -17,15 +22,26 @@ A simple voxel-style world builder using Three.js.
 
 ### Desktop
 - **WASD** or **Arrow Keys**: Move player
-- **E**: Toggle tile type (grass/mud)
+- **1-4**: Select tile type (grass, dirt, sand, water)
+- **E**: Place selected tile
 - **Spacebar**: Jump
 - **Shift/Control**: Crouch
 - **Reset World** button: Clear all changes and regenerate the world
 
 ### Mobile
 - **Directional Pad**: Move player
+- **Tile Buttons**: Select tile type
+- **Place** button: Place selected tile
 - **Jump** button: Jump up
-- **Toggle** button: Change tile type
+
+## Persistence
+
+The game automatically saves your progress using localStorage:
+- **World Map**: Saved whenever you place or modify tiles
+- **Player Position**: Saved periodically as you move around
+- **Settings**: Saved when changed
+
+Your world and position will be exactly as you left them when you return to the game.
 
 ## Getting Started
 
@@ -33,29 +49,31 @@ A simple voxel-style world builder using Three.js.
 2. Open index.html in your browser
 3. Start building your world!
 
+## Live Demo
+
+Check out the live demo at: https://ainstarc.github.io/pixel-realm/
+
 ## Technical Details
 
 - Built with Three.js for 3D rendering
 - Uses localStorage for persistent world data
 - Responsive design works on both desktop and mobile devices
 - No build process required - pure JavaScript
+- Deployed using GitHub Pages
 
-## Changelog
+## Development
 
-### v0.3.0
-- Added mobile touch controls
-- Added player position saving
-- Expanded storage capabilities
-- Added README and documentation
+To run locally:
+```
+npm install
+npm run dev
+```
 
-### v0.2.0
-- Added persistent storage using localStorage
-- Added tile highlighting with border
-- Fixed key press detection for tile toggling
-- Added reset world functionality
+To build for production:
+```
+npm run build
+```
 
-### v0.1.0
-- Initial release
-- Basic world generation
-- Player movement
-- Tile toggling
+## License
+
+MIT License - See LICENSE file for details

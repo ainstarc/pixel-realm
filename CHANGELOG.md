@@ -2,12 +2,54 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.6.3]
+
+### Fixed
+- Fixed "non-passive event listener" warning in mobile controls
+- Added explicit { passive: false } option to touch event listeners
+- Prevented page scrolling when using mobile controls
+
+## [0.6.2]
+
+### Added
+- Comprehensive documentation for all core modules
+- Expanded README with detailed persistence information
+- JSDoc comments for better code readability
+
+### Fixed
+- Clarified player position saving mechanism
+- Improved error handling in storage operations
+
+## [0.6.1]
+
+### Fixed
+- Fixed persistence for all tile types (grass, dirt, sand, water)
+- Added proper tile type mapping system
+- Ensured consistent material application on reload
+
+## [0.6.0]
+
+### Added
+- GitHub Actions workflow for automatic deployment
+- Live demo on GitHub Pages
+- Updated README with comprehensive documentation
+- Development and build instructions
+
+## [0.5.0]
+
+### Added
+- Tile placement preview system
+- Semi-transparent preview of selected tile under player
+- Real-time preview updates as player moves
+- Preview uses actual tile material with transparency
+
 ## [0.4.0]
 
 ### Added
 - HUD display showing currently selected tile type
 - Multiple tile type selection (press 1-4 to select different tiles)
 - Support for additional tile types (grass, dirt, sand, water)
+- Mobile tile selection buttons
 
 ### Changed
 - Improved tile placement to use selected tile type

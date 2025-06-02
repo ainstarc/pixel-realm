@@ -1,7 +1,22 @@
+/**
+ * World generation module for Pixel Realm
+ * 
+ * Handles the creation and loading of the game world.
+ * Generates a grid of tiles with different materials based on type.
+ * Supports loading saved map data from localStorage.
+ */
+
 import * as THREE from "three";
 import { materials } from "./assets.js";
 import { storage } from "./storage.js";
+import { TILE_NAMES } from "./player.js";
 
+/**
+ * Generates the game world map
+ * @param {THREE.Scene} scene - The Three.js scene
+ * @param {number} size - Size of the map (default: 32x32)
+ * @returns {Object} - Object containing mapData and tiles arrays
+ */
 export function generateMap(scene, size = 32) {
   // Try to load saved map data
   const savedMapData = storage.loadMapData();
@@ -19,7 +34,11 @@ export function generateMap(scene, size = 32) {
         ? savedMapData[z][x]
         : Math.random() < 0.8 ? 0 : 1;
         
-      const mat = type === 0 ? materials.grass : materials.dirt;
+      // Get the tile type name from the numeric value
+      const tileType = TILE_NAMES[type] || "grass";
+      
+      // Use the appropriate material for this tile type
+      const mat = materials[tileType];
       const tile = new THREE.Mesh(tileGeo, mat);
       tile.position.set(x - size / 2, 0, z - size / 2);
       scene.add(tile);
