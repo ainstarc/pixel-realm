@@ -19,7 +19,7 @@ export function generateMap(scene, size = 32) {
         ? savedMapData[z][x]
         : Math.random() < 0.8 ? 0 : 1;
         
-      const mat = type === 0 ? materials.grass : materials.mud;
+      const mat = type === 0 ? materials.grass : materials.dirt;
       const tile = new THREE.Mesh(tileGeo, mat);
       tile.position.set(x - size / 2, 0, z - size / 2);
       scene.add(tile);

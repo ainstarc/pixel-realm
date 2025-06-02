@@ -2,5 +2,6 @@
 export const gameState = {
   mapData: null,
   tiles: null,
-  materials: null
+  materials: null,
+  selectedTileType: 'grass', // Default selected tile
 };

@@ -1,4 +1,5 @@
 import { keys } from "./input.js";
+import { gameState } from "./gameState.js";
 
 // Mobile touch controls
 export function setupMobileControls() {
@@ -51,6 +52,29 @@ export function setupMobileControls() {
     return btn;
   };
   
+  // Create tile selection button
+  const createTileButton = (text, tileType) => {
+    const btn = document.createElement('button');
+    btn.textContent = text;
+    btn.style.width = '50px';
+    btn.style.height = '50px';
+    btn.style.backgroundColor = 'rgba(255,255,255,0.3)';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '10px';
+    btn.style.fontSize = '14px';
+    btn.style.color = 'white';
+    btn.style.userSelect = 'none';
+    btn.style.margin = '0 5px';
+    
+    // Touch events
+    btn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      gameState.selectedTileType = tileType;
+    });
+    
+    return btn;
+  };
+  
   // Movement buttons
   moveDiv.appendChild(createButton('↑', 'w', '1 / 2 / 2 / 3'));
   moveDiv.appendChild(createButton('←', 'a', '2 / 1 / 3 / 2'));
@@ -60,19 +84,41 @@ export function setupMobileControls() {
   // Action buttons
   const actionDiv = document.createElement('div');
   actionDiv.style.display = 'flex';
+  actionDiv.style.flexDirection = 'column';
   actionDiv.style.gap = '10px';
+  
+  // Main action buttons
+  const mainActions = document.createElement('div');
+  mainActions.style.display = 'flex';
+  mainActions.style.gap = '10px';
   
   // Jump button
   const jumpBtn = createButton('Jump', ' ', '');
   jumpBtn.style.width = '80px';
   jumpBtn.style.height = '80px';
-  actionDiv.appendChild(jumpBtn);
+  mainActions.appendChild(jumpBtn);
   
   // Toggle button
-  const toggleBtn = createButton('Toggle', 'e', '');
+  const toggleBtn = createButton('Place', 'e', '');
   toggleBtn.style.width = '80px';
   toggleBtn.style.height = '80px';
-  actionDiv.appendChild(toggleBtn);
+  mainActions.appendChild(toggleBtn);
+  
+  actionDiv.appendChild(mainActions);
+  
+  // Tile selection row
+  const tileSelectionDiv = document.createElement('div');
+  tileSelectionDiv.style.display = 'flex';
+  tileSelectionDiv.style.justifyContent = 'center';
+  tileSelectionDiv.style.marginTop = '10px';
+  
+  // Tile buttons
+  tileSelectionDiv.appendChild(createTileButton('Grass', 'grass'));
+  tileSelectionDiv.appendChild(createTileButton('Dirt', 'dirt'));
+  tileSelectionDiv.appendChild(createTileButton('Sand', 'sand'));
+  tileSelectionDiv.appendChild(createTileButton('Water', 'water'));
+  
+  actionDiv.appendChild(tileSelectionDiv);
   
   // Add to DOM
   controlsDiv.appendChild(moveDiv);

@@ -6,6 +6,7 @@ import { materials } from "./assets.js";
 import { gameState } from "./gameState.js";
 import { storage } from "./storage.js";
 import { setupMobileControls } from "./mobileControls.js";
+import { setupHUD } from "./hud.js";
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -35,7 +36,7 @@ scene.add(dirLight);
 function addControls() {
   const controlsDiv = document.createElement('div');
   controlsDiv.style.position = 'absolute';
-  controlsDiv.style.top = '10px';
+  controlsDiv.style.bottom = '10px';
   controlsDiv.style.left = '10px';
   controlsDiv.style.color = 'white';
   controlsDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
@@ -71,6 +72,9 @@ addControls();
 // Setup mobile controls if on a touch device
 setupMobileControls();
 
+// Setup HUD
+const hud = setupHUD();
+
 // Animate
 function animate() {
   requestAnimationFrame(animate);
@@ -79,6 +83,9 @@ function animate() {
   camera.position.x = player.position.x + 2;
   camera.position.z = player.position.z + 2;
   camera.lookAt(player.position);
+
+  // Update HUD
+  hud.update();
 
   renderer.render(scene, camera);
   

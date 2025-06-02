@@ -4,7 +4,9 @@ const loader = new THREE.TextureLoader();
 
 export const textures = {
   grass: loader.load("src/assets/textures/grass.png"),
-  mud: loader.load("src/assets/textures/mud.png"),
+  dirt: loader.load("src/assets/textures/dirt.png"),
+  sand: loader.load("src/assets/textures/sand.png"),
+  water: loader.load("src/assets/textures/water.png"),
 };
 
 // Keep them pixelated
@@ -15,5 +17,11 @@ Object.values(textures).forEach((tex) => {
 
 export const materials = {
   grass: new THREE.MeshLambertMaterial({ map: textures.grass }),
-  mud: new THREE.MeshLambertMaterial({ map: textures.mud }),
+  dirt: new THREE.MeshLambertMaterial({ map: textures.dirt }),
+  sand: new THREE.MeshLambertMaterial({ map: textures.sand }),
+  water: new THREE.MeshLambertMaterial({ 
+    map: textures.water,
+    transparent: true,
+    opacity: 0.8
+  }),
 };

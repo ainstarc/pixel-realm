@@ -75,11 +75,13 @@ export function updatePlayerMovement(player, keys) {
       
       // Toggle tile type ONLY on initial 'e' key press
       if (keyPressed["e"]) {
-        gameState.mapData[z][x] = gameState.mapData[z][x] === 0 ? 1 : 0;
-        currentTile.material = gameState.mapData[z][x] === 0 
-          ? gameState.materials.grass 
-          : gameState.materials.mud;
-          
+        // Place the currently selected tile type
+        const newType = gameState.selectedTileType === "grass" ? 0 : 1;
+        gameState.mapData[z][x] = newType;
+        
+        // Update tile material based on selected type
+        currentTile.material = gameState.materials[gameState.selectedTileType];
+        
         // Save map data when changes are made
         saveMapData();
       }

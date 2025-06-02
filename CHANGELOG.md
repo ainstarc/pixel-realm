@@ -2,6 +2,17 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.4.0]
+
+### Added
+- HUD display showing currently selected tile type
+- Multiple tile type selection (press 1-4 to select different tiles)
+- Support for additional tile types (grass, dirt, sand, water)
+
+### Changed
+- Improved tile placement to use selected tile type
+- Renamed all "mud" references to "dirt" for consistency
+
 ## [0.3.0]
 
 ### Added
