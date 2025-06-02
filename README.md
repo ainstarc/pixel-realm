@@ -5,6 +5,8 @@ A simple voxel-style world builder using Three.js.
 ## Features
 
 - 3D voxel-style world with multiple tile types (grass, dirt, sand, water)
+- True 3D voxel grid with support for vertical layers
+- Underground terrain with different block types at different depths
 - Player movement with WASD keys or arrow keys
 - Place different tile types with the E key
 - Tile selection system (press 1-4 to select different tiles)
@@ -12,7 +14,7 @@ A simple voxel-style world builder using Three.js.
 - Tile placement preview shows what will be placed before you commit
 - Highlighted tile indicator shows which tile you're standing on
 - Full persistence system:
-  - World state saves automatically as you build
+  - 3D world state saves automatically as you build
   - Player position is remembered between sessions
   - All tile types (grass, dirt, sand, water) are properly saved
 - Mobile touch controls for playing on phones and tablets

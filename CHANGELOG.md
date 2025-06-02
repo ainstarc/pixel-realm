@@ -2,6 +2,15 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.9.0]
+
+### Added
+- Converted world map to 3D voxel grid structure
+- Added support for vertical layers (height) in the world
+- Updated world generation to create underground layers
+- Modified tile rendering to support the 3D structure
+- Updated player interaction to work with 3D coordinates
+
 ## [0.8.0]
 
 ### Changed

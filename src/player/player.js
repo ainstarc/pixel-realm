@@ -61,20 +61,20 @@ export function createPlayer(scene) {
     player.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
   } else {
     console.log("No saved position found, using default");
-    player.position.set(0, 0.3, 0);
+    player.position.set(0, 0.5, 0);
   }
   
   scene.add(player);
 
   // Create highlight border
-  const borderGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.05, 0.15, 1.05));
+  const borderGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.05, 0.55, 1.05));
   const borderMat = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 });
   highlightBorder = new THREE.LineSegments(borderGeo, borderMat);
   highlightBorder.visible = false;
   scene.add(highlightBorder);
   
   // Create preview tile
-  const tileGeo = new THREE.BoxGeometry(1, 0.1, 1);
+  const tileGeo = new THREE.BoxGeometry(1, 0.5, 1);
   const previewMat = new THREE.MeshStandardMaterial({
     transparent: true,
     opacity: 0.5,
@@ -94,15 +94,18 @@ export function createPlayer(scene) {
  * Gets the tile index at the player's position
  * @param {THREE.Vector3} playerPos - Player position
  * @param {number} mapSize - Size of the map
- * @returns {Object} - Object with x and z indices
+ * @returns {Object} - Object with x, y, and z indices
  */
 function getPlayerTileIndex(playerPos, mapSize) {
   const half = mapSize / 2;
   const x = Math.floor(playerPos.x + half);
+  const y = 0; // Currently only working with the top layer
   const z = Math.floor(playerPos.z + half);
+  
   // Clamp indexes in range
   return {
     x: Math.max(0, Math.min(mapSize - 1, x)),
+    y: y,
     z: Math.max(0, Math.min(mapSize - 1, z)),
   };
 }
@@ -146,14 +149,15 @@ export function updatePlayerMovement(player, keys) {
 
   // Highlight the current tile
   if (gameState.mapData && gameState.tiles && gameState.materials) {
-    const { x, z } = getPlayerTileIndex(player.position, 32);
+    const { x, y, z } = getPlayerTileIndex(player.position, 32);
     
     // Make sure indices are valid
-    if (gameState.mapData[z] && gameState.mapData[z][x] !== undefined && 
-        gameState.tiles[z] && gameState.tiles[z][x]) {
+    if (gameState.mapData[x] && gameState.mapData[x][y] && 
+        gameState.mapData[x][y][z] !== undefined && 
+        gameState.tiles[x] && gameState.tiles[x][y] && gameState.tiles[x][y][z]) {
       
       // Update highlight border position
-      const currentTile = gameState.tiles[z][x];
+      const currentTile = gameState.tiles[x][y][z];
       highlightBorder.position.copy(currentTile.position);
       highlightBorder.visible = true;
       
@@ -169,13 +173,13 @@ export function updatePlayerMovement(player, keys) {
       }
       
       // Store current tile info
-      highlightedTile = { x, z };
+      highlightedTile = { x, y, z };
       
       // Toggle tile type ONLY on initial 'e' key press
       if (keyPressed["e"]) {
         // Place the currently selected tile type
         const newType = TILE_TYPES[gameState.selectedTileType];
-        gameState.mapData[z][x] = newType;
+        gameState.mapData[x][y][z] = newType;
         
         // Update tile material based on selected type
         currentTile.material = gameState.materials[gameState.selectedTileType];
