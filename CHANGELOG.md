@@ -2,6 +2,13 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.7.2]
+
+### Fixed
+- Fixed 404 errors when loading textures on GitHub Pages
+- Updated texture paths to use public folder structure
+- Simplified asset loading for better compatibility with Vite builds
+
 ## [0.7.1]
 
 ### Fixed

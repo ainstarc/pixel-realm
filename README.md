@@ -82,18 +82,31 @@ When deploying to GitHub Pages:
    });
    ```
 
-2. Make sure all asset paths use the base URL prefix:
-   ```javascript
-   const basePath = import.meta.env?.BASE_URL || '';
-   loader.load(`${basePath}src/assets/textures/grass.png`);
+2. Place texture files in the public folder:
+   ```
+   public/
+     └── textures/
+         ├── grass.png
+         ├── dirt.png
+         ├── sand.png
+         └── water.png
    ```
 
-3. The GitHub Actions workflow will automatically deploy to GitHub Pages when you push to the main branch
+3. Reference textures with simple paths in assets.js:
+   ```javascript
+   export const textures = {
+     grass: loader.load("textures/grass.png"),
+     dirt: loader.load("textures/dirt.png"),
+     // ...
+   };
+   ```
 
-4. If you encounter a black screen after deployment:
+4. The GitHub Actions workflow will automatically deploy to GitHub Pages when you push to the main branch
+
+5. If you encounter a black screen after deployment:
    - Check browser console for 404 errors on textures
-   - Verify that the base path is correctly set
-   - Ensure all assets are properly included in the build
+   - Verify that texture files are in the correct public folder
+   - Clear browser cache or try in incognito mode
 
 ## License
 
