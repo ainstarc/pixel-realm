@@ -17,6 +17,8 @@ let highlightBorder = null;
 let previewTile = null;
 let saveTimer = 0;
 let positionSaveTimer = 0;
+let isJumping = false;
+let jumpVelocity = 0;
 
 /**
  * Map tile types to numeric values for storage
@@ -55,8 +57,10 @@ export function createPlayer(scene) {
   // Try to load saved position
   const savedPosition = storage.loadPlayerPosition();
   if (savedPosition) {
+    console.log("Loaded player position:", savedPosition);
     player.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
   } else {
+    console.log("No saved position found, using default");
     player.position.set(0, 0.3, 0);
   }
   
@@ -79,6 +83,9 @@ export function createPlayer(scene) {
   previewTile = new THREE.Mesh(tileGeo, previewMat);
   previewTile.visible = false;
   scene.add(previewTile);
+
+  // Save initial position immediately to ensure it's stored
+  storage.savePlayerPosition(player.position);
 
   return player;
 }
@@ -127,6 +134,8 @@ function updatePreviewMaterial() {
  */
 export function updatePlayerMovement(player, keys) {
   const speed = 0.05;
+  const gravity = 0.005; // Reduced gravity for slower fall
+  const jumpStrength = 0.15;
 
   const nextPos = player.position.clone();
 
@@ -177,17 +186,38 @@ export function updatePlayerMovement(player, keys) {
     }
   }
 
-  if (keys[" "]) nextPos.y += speed; // Jump
+  // Improved jumping system
+  const onGround = player.position.y <= 0.5;
+  
+  // Start jump when spacebar is pressed and player is on the ground
+  if (keys[" "] && onGround && !isJumping) {
+    isJumping = true;
+    jumpVelocity = jumpStrength;
+  }
+  
+  // Apply jump velocity
+  if (isJumping) {
+    nextPos.y += jumpVelocity;
+    jumpVelocity -= gravity;
+    
+    // End jump when player lands
+    if (nextPos.y <= 0.5) {
+      nextPos.y = 0.5;
+      isJumping = false;
+      jumpVelocity = 0;
+    }
+  } else {
+    // Apply gravity when not jumping
+    nextPos.y -= gravity;
+    if (nextPos.y < 0.5) nextPos.y = 0.5;
+  }
+
   if (keys["ShiftLeft"]) nextPos.y -= speed; // Crouch
   if (keys["ControlLeft"]) nextPos.y -= speed; // Crouch
   if (keys["ArrowUp"]) nextPos.z -= speed; // Arrow up
   if (keys["ArrowDown"]) nextPos.z += speed; // Arrow down
   if (keys["ArrowLeft"]) nextPos.x -= speed; // Arrow left
   if (keys["ArrowRight"]) nextPos.x += speed; // Arrow right
-  // Gravity
-  nextPos.y -= 0.01;
-  if (nextPos.y < 0.5) nextPos.y = 0.5; // Prevent going below ground
-  if (nextPos.y > 2) nextPos.y = 1; // Prevent going above a certain height
 
   // Clamp to map boundary (-16 to 15 for a 32x32 map)
   const min = -16;
@@ -223,6 +253,7 @@ function savePlayerPosition(position) {
   clearTimeout(positionSaveTimer);
   positionSaveTimer = setTimeout(() => {
     storage.savePlayerPosition(position);
+    console.log("Player position saved:", {x: position.x, y: position.y, z: position.z});
   }, 1000); // Less frequent saves for position
 }
 

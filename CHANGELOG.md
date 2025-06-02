@@ -2,6 +2,28 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.7.5]
+
+### Fixed
+- Fixed player position not being saved between sessions
+- Added immediate position save on player creation
+- Added debug logging for position saving/loading
+- Ensured player position persistence works correctly
+
+## [0.7.4]
+
+### Changed
+- Reduced gravity to make jump falls less abrupt
+- Fine-tuned jump physics for a more natural feel
+
+## [0.7.3]
+
+### Fixed
+- Fixed Place button not working on mobile devices
+- Improved jumping mechanics with proper physics-based system
+- Added jump velocity and gravity for more natural movement
+- Enhanced mobile controls with better action button handling
+
 ## [0.7.2]
 
 ### Fixed

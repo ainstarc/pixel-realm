@@ -8,8 +8,8 @@ A simple voxel-style world builder using Three.js.
 - Player movement with WASD keys or arrow keys
 - Place different tile types with the E key
 - Tile selection system (press 1-4 to select different tiles)
+- Physics-based jumping with realistic gravity
 - Tile placement preview shows what will be placed before you commit
-- Jump with spacebar, crouch with shift or control
 - Highlighted tile indicator shows which tile you're standing on
 - Full persistence system:
   - World state saves automatically as you build
@@ -51,6 +51,7 @@ Check out the live demo at: https://ainstarc.github.io/pixel-realm/
 ## Technical Details
 
 - Built with Three.js for 3D rendering
+- Physics-based movement system
 - Uses localStorage for persistent world data
 - Responsive design works on both desktop and mobile devices
 - Deployed using GitHub Pages and Vite

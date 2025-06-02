@@ -5,7 +5,7 @@
  * Includes movement pad, action buttons, and tile selection.
  */
 
-import { keys } from "./input.js";
+import { keys, keyPressed } from "./input.js";
 import { gameState } from "./gameState.js";
 
 // Mobile touch controls
@@ -59,6 +59,34 @@ export function setupMobileControls() {
     return btn;
   };
   
+  // Create action button that triggers keyPressed events
+  const createActionButton = (text, key, width, height) => {
+    const btn = document.createElement('button');
+    btn.textContent = text;
+    btn.style.width = width || '80px';
+    btn.style.height = height || '80px';
+    btn.style.backgroundColor = 'rgba(255,255,255,0.3)';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '10px';
+    btn.style.fontSize = '24px';
+    btn.style.color = 'white';
+    btn.style.userSelect = 'none';
+    
+    // Touch events with passive: false option
+    btn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      keys[key] = true;
+      keyPressed[key] = true; // Important: Set keyPressed for action buttons
+    }, { passive: false });
+    
+    btn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      keys[key] = false;
+    }, { passive: false });
+    
+    return btn;
+  };
+  
   // Create tile selection button
   const createTileButton = (text, tileType) => {
     const btn = document.createElement('button');
@@ -99,17 +127,15 @@ export function setupMobileControls() {
   mainActions.style.display = 'flex';
   mainActions.style.gap = '10px';
   
-  // Jump button
+  // Jump button - increased size for better usability
   const jumpBtn = createButton('Jump', ' ', '');
   jumpBtn.style.width = '80px';
   jumpBtn.style.height = '80px';
   mainActions.appendChild(jumpBtn);
   
-  // Toggle button
-  const toggleBtn = createButton('Place', 'e', '');
-  toggleBtn.style.width = '80px';
-  toggleBtn.style.height = '80px';
-  mainActions.appendChild(toggleBtn);
+  // Place button - using createActionButton to trigger keyPressed
+  const placeBtn = createActionButton('Place', 'e', '80px', '80px');
+  mainActions.appendChild(placeBtn);
   
   actionDiv.appendChild(mainActions);
   
