@@ -7,6 +7,7 @@ import { gameState } from "./gameState.js";
 import { storage } from "./storage.js";
 import { setupMobileControls } from "./mobileControls.js";
 import { setupHUD } from "./hud.js";
+import { setupSettingsMenu } from "./settingsMenu.js";
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -32,31 +33,6 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
 dirLight.position.set(1, 3, 2);
 scene.add(dirLight);
 
-// Add UI controls
-function addControls() {
-  const controlsDiv = document.createElement('div');
-  controlsDiv.style.position = 'absolute';
-  controlsDiv.style.bottom = '10px';
-  controlsDiv.style.left = '10px';
-  controlsDiv.style.color = 'white';
-  controlsDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
-  controlsDiv.style.padding = '10px';
-  controlsDiv.style.borderRadius = '5px';
-  
-  // Reset button
-  const resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Reset World';
-  resetBtn.onclick = () => {
-    if (confirm('Reset the world? This will clear all your changes.')) {
-      storage.clearSavedData();
-      location.reload();
-    }
-  };
-  
-  controlsDiv.appendChild(resetBtn);
-  document.body.appendChild(controlsDiv);
-}
-
 // Init
 setupInput();
 const { mapData, tiles } = generateMap(scene, 32);
@@ -67,12 +43,10 @@ gameState.tiles = tiles;
 gameState.materials = materials;
 
 const player = createPlayer(scene);
-addControls();
 
-// Setup mobile controls if on a touch device
+// Setup UI elements
+setupSettingsMenu();
 setupMobileControls();
-
-// Setup HUD
 const hud = setupHUD();
 
 // Animate

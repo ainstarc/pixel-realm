@@ -16,6 +16,7 @@ A simple voxel-style world builder using Three.js.
   - Player position is remembered between sessions
   - All tile types (grass, dirt, sand, water) are properly saved
 - Mobile touch controls for playing on phones and tablets
+- Settings menu with world reset and issue reporting
 - Reset world option to start fresh
 
 ## Controls
@@ -26,7 +27,7 @@ A simple voxel-style world builder using Three.js.
 - **E**: Place selected tile
 - **Spacebar**: Jump
 - **Shift/Control**: Crouch
-- **Reset World** button: Clear all changes and regenerate the world
+- **⚙️ (Settings)**: Access settings menu
 
 ### Mobile
 - **Directional Pad**: Move player
@@ -43,12 +44,6 @@ The game automatically saves your progress using localStorage:
 
 Your world and position will be exactly as you left them when you return to the game.
 
-## Getting Started
-
-1. Clone this repository
-2. Open index.html in your browser
-3. Start building your world!
-
 ## Live Demo
 
 Check out the live demo at: https://ainstarc.github.io/pixel-realm/
@@ -58,8 +53,7 @@ Check out the live demo at: https://ainstarc.github.io/pixel-realm/
 - Built with Three.js for 3D rendering
 - Uses localStorage for persistent world data
 - Responsive design works on both desktop and mobile devices
-- No build process required - pure JavaScript
-- Deployed using GitHub Pages
+- Deployed using GitHub Pages and Vite
 
 ## Development
 
@@ -73,6 +67,33 @@ To build for production:
 ```
 npm run build
 ```
+
+## Deployment
+
+When deploying to GitHub Pages:
+
+1. Ensure `vite.config.js` has the correct base path matching your repository name:
+   ```javascript
+   export default defineConfig({
+     base: '/pixel-realm/', // Must match your repository name
+     build: {
+       outDir: 'dist',
+     }
+   });
+   ```
+
+2. Make sure all asset paths use the base URL prefix:
+   ```javascript
+   const basePath = import.meta.env?.BASE_URL || '';
+   loader.load(`${basePath}src/assets/textures/grass.png`);
+   ```
+
+3. The GitHub Actions workflow will automatically deploy to GitHub Pages when you push to the main branch
+
+4. If you encounter a black screen after deployment:
+   - Check browser console for 404 errors on textures
+   - Verify that the base path is correctly set
+   - Ensure all assets are properly included in the build
 
 ## License
 

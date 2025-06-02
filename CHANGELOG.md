@@ -2,6 +2,28 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.7.1]
+
+### Fixed
+- Fixed black screen issue when deploying to GitHub Pages
+- Added proper base path configuration in Vite
+- Updated asset loading to use correct paths in deployment
+- Added error handling for texture loading
+- Improved debugging information for deployment issues
+
+## [0.7.0]
+
+### Added
+- Settings menu with gear icon in top-right corner
+- Reset World option in settings menu
+- Report Issue button that links to GitHub issues
+- Placeholder button for future features
+- Improved UI organization
+
+### Changed
+- Moved reset functionality from bottom button to settings menu
+- Enhanced UI styling for better visibility
+
 ## [0.6.3]
 
 ### Fixed
