@@ -9,14 +9,16 @@
 // Central place to store shared game state
 export const gameState = {
   /**
-   * 2D array of tile type values
+   * 3D array of tile type values
    * Each value corresponds to a tile type (0=grass, 1=dirt, etc.)
+   * Structure: mapData[x][y][z]
    */
   mapData: null,
   
   /**
-   * 2D array of THREE.Mesh objects representing the tiles
+   * 3D array of THREE.Mesh objects representing the tiles
    * Corresponds to the mapData array positions
+   * Structure: tiles[x][y][z]
    */
   tiles: null,
   

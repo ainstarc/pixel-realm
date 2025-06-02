@@ -5,8 +5,8 @@
  * Includes movement pad, action buttons, and tile selection.
  */
 
-import { keys, keyPressed } from "./input.js";
-import { gameState } from "./gameState.js";
+import { keys, keyPressed } from "../player/input.js";
+import { gameState } from "../core/gameState.js";
 
 // Mobile touch controls
 export function setupMobileControls() {
@@ -110,11 +110,11 @@ export function setupMobileControls() {
     return btn;
   };
   
-  // Movement buttons
-  moveDiv.appendChild(createButton('↑', 'w', '1 / 2 / 2 / 3'));
-  moveDiv.appendChild(createButton('←', 'a', '2 / 1 / 3 / 2'));
-  moveDiv.appendChild(createButton('↓', 's', '2 / 2 / 3 / 3'));
-  moveDiv.appendChild(createButton('→', 'd', '2 / 3 / 3 / 4'));
+  // Movement buttons - updated for directional movement
+  moveDiv.appendChild(createButton('↑', 'w', '1 / 2 / 2 / 3')); // Forward
+  moveDiv.appendChild(createButton('←', 'a', '2 / 1 / 3 / 2')); // Rotate left
+  moveDiv.appendChild(createButton('↓', 's', '2 / 2 / 3 / 3')); // Backward
+  moveDiv.appendChild(createButton('→', 'd', '2 / 3 / 3 / 4')); // Rotate right
   
   // Action buttons
   const actionDiv = document.createElement('div');

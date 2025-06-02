@@ -1,13 +1,13 @@
 import * as THREE from "three";
-import { generateMap } from "./world.js";
-import { createPlayer, updatePlayerMovement } from "./player.js";
-import { setupInput, keys, resetPressedKeys } from "./input.js";
-import { materials } from "./assets.js";
-import { gameState } from "./gameState.js";
-import { storage } from "./storage.js";
-import { setupMobileControls } from "./mobileControls.js";
-import { setupHUD } from "./hud.js";
-import { setupSettingsMenu } from "./settingsMenu.js";
+import { generateMap } from "./world/world.js";
+import { createPlayer, updatePlayerMovement } from "./player/player.js";
+import { setupInput, keys, resetPressedKeys } from "./player/input.js";
+import { materials } from "./core/assets.js";
+import { gameState } from "./core/gameState.js";
+import { storage } from "./core/storage.js";
+import { setupMobileControls } from "./ui/mobileControls.js";
+import { setupHUD } from "./ui/hud.js";
+import { setupSettingsMenu } from "./ui/settingsMenu.js";
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -52,17 +52,13 @@ const hud = setupHUD();
 // Animate
 function animate() {
   requestAnimationFrame(animate);
-  updatePlayerMovement(player, keys);
-
-  camera.position.x = player.position.x + 2;
-  camera.position.z = player.position.z + 2;
-  camera.lookAt(player.position);
+  updatePlayerMovement(player, keys, camera);
 
   // Update HUD
   hud.update();
 
   renderer.render(scene, camera);
-  
+
   // Reset one-time key presses at the end of each frame
   resetPressedKeys();
 }

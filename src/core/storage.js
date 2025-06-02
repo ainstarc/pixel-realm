@@ -15,7 +15,7 @@
 export const storage = {
   /**
    * Save map data to localStorage
-   * @param {Array} mapData - 2D array of tile type values
+   * @param {Array} mapData - 3D array of tile type values
    */
   saveMapData(mapData) {
     try {
@@ -27,7 +27,7 @@ export const storage = {
 
   /**
    * Load map data from localStorage
-   * @returns {Array|null} - 2D array of tile type values or null if not found
+   * @returns {Array|null} - 3D array of tile type values or null if not found
    */
   loadMapData() {
     try {

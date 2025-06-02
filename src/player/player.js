@@ -1,15 +1,15 @@
 /**
  * Player module for Pixel Realm
- * 
+ *
  * Handles player creation, movement, and interaction with the world.
  * Includes tile highlighting, preview system, and tile placement.
  * Also manages persistence of player position and map data.
  */
 
 import * as THREE from "three";
-import { gameState } from "./gameState.js";
+import { gameState } from "../core/gameState.js";
 import { keyPressed } from "./input.js";
-import { storage } from "./storage.js";
+import { storage } from "../core/storage.js";
 
 // Track the currently highlighted tile
 let highlightedTile = null;
@@ -19,6 +19,10 @@ let saveTimer = 0;
 let positionSaveTimer = 0;
 let isJumping = false;
 let jumpVelocity = 0;
+let playerRotation = 0; // Player facing direction in radians
+// Track key press duration for strafe detection
+let keyPressTime = { a: 0, d: 0 };
+const STRAFE_THRESHOLD = 15; // Frames to hold before strafing
 
 /**
  * Map tile types to numeric values for storage
@@ -28,7 +32,7 @@ const TILE_TYPES = {
   grass: 0,
   dirt: 1,
   sand: 2,
-  water: 3
+  water: 3,
 };
 
 /**
@@ -39,7 +43,7 @@ const TILE_NAMES = {
   0: "grass",
   1: "dirt",
   2: "sand",
-  3: "water"
+  3: "water",
 };
 
 /**
@@ -53,7 +57,7 @@ export function createPlayer(scene) {
   const mat = new THREE.MeshStandardMaterial({ color: 0xff4444 });
 
   const player = new THREE.Mesh(geo, mat);
-  
+
   // Try to load saved position
   const savedPosition = storage.loadPlayerPosition();
   if (savedPosition) {
@@ -61,24 +65,29 @@ export function createPlayer(scene) {
     player.position.set(savedPosition.x, savedPosition.y, savedPosition.z);
   } else {
     console.log("No saved position found, using default");
-    player.position.set(0, 0.3, 0);
+    player.position.set(0, 0.5, 0);
   }
-  
+
   scene.add(player);
 
   // Create highlight border
-  const borderGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.05, 0.15, 1.05));
-  const borderMat = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 });
+  const borderGeo = new THREE.EdgesGeometry(
+    new THREE.BoxGeometry(1.05, 0.55, 1.05)
+  );
+  const borderMat = new THREE.LineBasicMaterial({
+    color: 0xffff00,
+    linewidth: 2,
+  });
   highlightBorder = new THREE.LineSegments(borderGeo, borderMat);
   highlightBorder.visible = false;
   scene.add(highlightBorder);
-  
+
   // Create preview tile
-  const tileGeo = new THREE.BoxGeometry(1, 0.1, 1);
+  const tileGeo = new THREE.BoxGeometry(1, 0.5, 1);
   const previewMat = new THREE.MeshStandardMaterial({
     transparent: true,
     opacity: 0.5,
-    color: 0xffffff
+    color: 0xffffff,
   });
   previewTile = new THREE.Mesh(tileGeo, previewMat);
   previewTile.visible = false;
@@ -94,15 +103,18 @@ export function createPlayer(scene) {
  * Gets the tile index at the player's position
  * @param {THREE.Vector3} playerPos - Player position
  * @param {number} mapSize - Size of the map
- * @returns {Object} - Object with x and z indices
+ * @returns {Object} - Object with x, y, and z indices
  */
 function getPlayerTileIndex(playerPos, mapSize) {
   const half = mapSize / 2;
   const x = Math.floor(playerPos.x + half);
+  const y = 0; // Currently only working with the top layer
   const z = Math.floor(playerPos.z + half);
+
   // Clamp indexes in range
   return {
     x: Math.max(0, Math.min(mapSize - 1, x)),
+    y: y,
     z: Math.max(0, Math.min(mapSize - 1, z)),
   };
 }
@@ -112,17 +124,17 @@ function getPlayerTileIndex(playerPos, mapSize) {
  */
 function updatePreviewMaterial() {
   if (!gameState.materials || !gameState.selectedTileType) return;
-  
+
   // Clone the selected material and make it transparent
   const selectedMaterial = gameState.materials[gameState.selectedTileType];
   if (!selectedMaterial) return;
-  
+
   // Create a new material based on the selected one
   const previewMaterial = selectedMaterial.clone();
   previewMaterial.transparent = true;
   previewMaterial.opacity = 0.5;
   previewMaterial.depthWrite = false; // Prevents z-fighting
-  
+
   // Apply the new material
   previewTile.material = previewMaterial;
 }
@@ -131,55 +143,96 @@ function updatePreviewMaterial() {
  * Updates player movement and handles interactions
  * @param {THREE.Mesh} player - The player mesh
  * @param {Object} keys - Object tracking key states
+ * @param {THREE.Camera} camera - The camera to update based on player position
  */
-export function updatePlayerMovement(player, keys) {
+export function updatePlayerMovement(player, keys, camera) {
   const speed = 0.05;
+  const rotationSpeed = 0.03;
   const gravity = 0.005; // Reduced gravity for slower fall
   const jumpStrength = 0.15;
+  const camDistance = 2;
+  const camHeight = 1;
 
   const nextPos = player.position.clone();
 
-  if (keys["w"]) nextPos.z -= speed;
-  if (keys["s"]) nextPos.z += speed;
-  if (keys["a"]) nextPos.x -= speed;
-  if (keys["d"]) nextPos.x += speed;
+  // Rotate player with A and D keys
+  if (keys["a"]) {
+    keyPressTime.a++;
+    if (keyPressTime.a < STRAFE_THRESHOLD) {
+      playerRotation += rotationSpeed;
+    } else {
+      nextPos.x -= Math.cos(playerRotation) * speed;
+      nextPos.z += Math.sin(playerRotation) * speed;
+    }
+  } else {
+    keyPressTime.a = 0;
+  }
+  if (keys["d"]) {
+    keyPressTime.d++;
+    if (keyPressTime.d < STRAFE_THRESHOLD) {
+      playerRotation -= rotationSpeed;
+    } else {
+      nextPos.x += Math.cos(playerRotation) * speed;
+      nextPos.z -= Math.sin(playerRotation) * speed;
+    }
+  } else {
+    keyPressTime.d = 0;
+  }
+
+  // Apply rotation to player mesh
+  player.rotation.y = playerRotation;
+
+  // Move forward/backward in the facing direction
+  if (keys["w"]) {
+    nextPos.x -= Math.sin(playerRotation) * speed;
+    nextPos.z -= Math.cos(playerRotation) * speed;
+  }
+  if (keys["s"]) {
+    nextPos.x += Math.sin(playerRotation) * speed;
+    nextPos.z += Math.cos(playerRotation) * speed;
+  }
 
   // Highlight the current tile
   if (gameState.mapData && gameState.tiles && gameState.materials) {
-    const { x, z } = getPlayerTileIndex(player.position, 32);
-    
+    const { x, y, z } = getPlayerTileIndex(player.position, 32);
+
     // Make sure indices are valid
-    if (gameState.mapData[z] && gameState.mapData[z][x] !== undefined && 
-        gameState.tiles[z] && gameState.tiles[z][x]) {
-      
+    if (
+      gameState.mapData[x] &&
+      gameState.mapData[x][y] &&
+      gameState.mapData[x][y][z] !== undefined &&
+      gameState.tiles[x] &&
+      gameState.tiles[x][y] &&
+      gameState.tiles[x][y][z]
+    ) {
       // Update highlight border position
-      const currentTile = gameState.tiles[z][x];
+      const currentTile = gameState.tiles[x][y][z];
       highlightBorder.position.copy(currentTile.position);
       highlightBorder.visible = true;
-      
+
       // Update preview tile
       previewTile.position.copy(currentTile.position);
       previewTile.position.y += 0.01; // Slightly above the actual tile to prevent z-fighting
       previewTile.visible = true;
-      
+
       // Update preview material when tile selection changes
       if (previewTile.userData.lastType !== gameState.selectedTileType) {
         updatePreviewMaterial();
         previewTile.userData.lastType = gameState.selectedTileType;
       }
-      
+
       // Store current tile info
-      highlightedTile = { x, z };
-      
+      highlightedTile = { x, y, z };
+
       // Toggle tile type ONLY on initial 'e' key press
       if (keyPressed["e"]) {
         // Place the currently selected tile type
         const newType = TILE_TYPES[gameState.selectedTileType];
-        gameState.mapData[z][x] = newType;
-        
+        gameState.mapData[x][y][z] = newType;
+
         // Update tile material based on selected type
         currentTile.material = gameState.materials[gameState.selectedTileType];
-        
+
         // Save map data when changes are made
         saveMapData();
       }
@@ -188,18 +241,18 @@ export function updatePlayerMovement(player, keys) {
 
   // Improved jumping system
   const onGround = player.position.y <= 0.5;
-  
+
   // Start jump when spacebar is pressed and player is on the ground
   if (keys[" "] && onGround && !isJumping) {
     isJumping = true;
     jumpVelocity = jumpStrength;
   }
-  
+
   // Apply jump velocity
   if (isJumping) {
     nextPos.y += jumpVelocity;
     jumpVelocity -= gravity;
-    
+
     // End jump when player lands
     if (nextPos.y <= 0.5) {
       nextPos.y = 0.5;
@@ -212,8 +265,7 @@ export function updatePlayerMovement(player, keys) {
     if (nextPos.y < 0.5) nextPos.y = 0.5;
   }
 
-  if (keys["ShiftLeft"]) nextPos.y -= speed; // Crouch
-  if (keys["ControlLeft"]) nextPos.y -= speed; // Crouch
+  // Arrow keys for alternative movement
   if (keys["ArrowUp"]) nextPos.z -= speed; // Arrow up
   if (keys["ArrowDown"]) nextPos.z += speed; // Arrow down
   if (keys["ArrowLeft"]) nextPos.x -= speed; // Arrow left
@@ -227,7 +279,15 @@ export function updatePlayerMovement(player, keys) {
   nextPos.z = Math.max(min, Math.min(max, nextPos.z));
 
   player.position.copy(nextPos);
-  
+
+  // Update camera to follow player from behind
+  camera.position.x =
+    player.position.x + Math.sin(playerRotation) * camDistance;
+  camera.position.z =
+    player.position.z + Math.cos(playerRotation) * camDistance;
+  camera.position.y = player.position.y + camHeight;
+  camera.lookAt(player.position);
+
   // Save player position periodically
   savePlayerPosition(player.position);
 }
@@ -253,7 +313,11 @@ function savePlayerPosition(position) {
   clearTimeout(positionSaveTimer);
   positionSaveTimer = setTimeout(() => {
     storage.savePlayerPosition(position);
-    console.log("Player position saved:", {x: position.x, y: position.y, z: position.z});
+    console.log("Player position saved:", {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+    });
   }, 1000); // Less frequent saves for position
 }
 

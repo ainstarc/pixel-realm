@@ -5,7 +5,7 @@
  * Currently shows the selected tile type in the top-left corner.
  */
 
-import { gameState } from "./gameState.js";
+import { gameState } from "../core/gameState.js";
 
 /**
  * Sets up the HUD elements
