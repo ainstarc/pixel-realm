@@ -1,0 +1,25 @@
+import * as THREE from "three";
+import { materials } from "./assets.js";
+
+export function generateMap(scene, size = 32) {
+  const mapData = [];
+  const tiles = [];
+  const tileGeo = new THREE.BoxGeometry(1, 0.1, 1);
+
+  for (let z = 0; z < size; z++) {
+    const rowData = [];
+    const rowTiles = [];
+    for (let x = 0; x < size; x++) {
+      const type = Math.random() < 0.8 ? 0 : 1;
+      const mat = type === 0 ? materials.grass : materials.mud;
+      const tile = new THREE.Mesh(tileGeo, mat);
+      tile.position.set(x - size / 2, 0, z - size / 2);
+      scene.add(tile);
+      rowData.push(type);
+      rowTiles.push(tile);
+    }
+    mapData.push(rowData);
+    tiles.push(rowTiles);
+  }
+  return { mapData, tiles };
+}
