@@ -9,7 +9,7 @@ export function setupInput() {
     // Only mark as pressed if it wasn't already down
     if (!keys[key]) {
       keyPressed[key] = true;
-      
+
       // Handle tile selection with number keys
       if (key === "1") {
         gameState.selectedTileType = "grass";
@@ -23,7 +23,7 @@ export function setupInput() {
     }
     keys[key] = true;
   });
-  
+
   window.addEventListener("keyup", (e) => {
     keys[e.key.toLowerCase()] = false;
   });
@@ -31,7 +31,7 @@ export function setupInput() {
 
 // Call this at the end of each frame to reset one-time presses
 export function resetPressedKeys() {
-  Object.keys(keyPressed).forEach(key => {
+  Object.keys(keyPressed).forEach((key) => {
     keyPressed[key] = false;
   });
 }

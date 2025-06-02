@@ -2,6 +2,17 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.10.0]
+
+### Added
+- Direction-based movement system
+  - A/D keys now rotate the player left/right
+  - W/S keys move forward/backward in the facing direction
+  - Camera follows player from behind based on facing direction
+- Third-person camera that adjusts based on player rotation
+- More intuitive controls for 3D navigation
+- Updated mobile controls to match new movement system
+
 ## [0.9.0]
 
 ### Added

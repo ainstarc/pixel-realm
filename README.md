@@ -25,16 +25,20 @@ A simple voxel-style world builder using Three.js.
 
 ### Desktop
 
-- **WASD** or **Arrow Keys**: Move player
+- **W**: Move forward in facing direction
+- **S**: Move backward in facing direction
+- **A/D**: Rotate player left/right
+- **Arrow Keys**: Alternative movement (legacy mode)
 - **1-4**: Select tile type (grass, dirt, sand, water)
 - **E**: Place selected tile
 - **Spacebar**: Jump
-- **Shift/Control**: Crouch
 - **⚙️ (Settings)**: Access settings menu
 
 ### Mobile
 
-- **Directional Pad**: Move player
+- **↑**: Move forward in facing direction
+- **↓**: Move backward in facing direction
+- **←/→**: Rotate player left/right
 - **Tile Buttons**: Select tile type
 - **Place** button: Place selected tile
 - **Jump** button: Jump up

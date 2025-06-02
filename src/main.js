@@ -52,17 +52,13 @@ const hud = setupHUD();
 // Animate
 function animate() {
   requestAnimationFrame(animate);
-  updatePlayerMovement(player, keys);
-
-  camera.position.x = player.position.x + 2;
-  camera.position.z = player.position.z + 2;
-  camera.lookAt(player.position);
+  updatePlayerMovement(player, keys, camera);
 
   // Update HUD
   hud.update();
 
   renderer.render(scene, camera);
-  
+
   // Reset one-time key presses at the end of each frame
   resetPressedKeys();
 }
