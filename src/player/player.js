@@ -20,6 +20,9 @@ let positionSaveTimer = 0;
 let isJumping = false;
 let jumpVelocity = 0;
 let playerRotation = 0; // Player facing direction in radians
+// Track key press duration for strafe detection
+let keyPressTime = { a: 0, d: 0 };
+const STRAFE_THRESHOLD = 15; // Frames to hold before strafing
 
 /**
  * Map tile types to numeric values for storage
@@ -153,8 +156,28 @@ export function updatePlayerMovement(player, keys, camera) {
   const nextPos = player.position.clone();
 
   // Rotate player with A and D keys
-  if (keys["a"]) playerRotation += rotationSpeed;
-  if (keys["d"]) playerRotation -= rotationSpeed;
+  if (keys["a"]) {
+    keyPressTime.a++;
+    if (keyPressTime.a < STRAFE_THRESHOLD) {
+      playerRotation += rotationSpeed;
+    } else {
+      nextPos.x -= Math.cos(playerRotation) * speed;
+      nextPos.z += Math.sin(playerRotation) * speed;
+    }
+  } else {
+    keyPressTime.a = 0;
+  }
+  if (keys["d"]) {
+    keyPressTime.d++;
+    if (keyPressTime.d < STRAFE_THRESHOLD) {
+      playerRotation -= rotationSpeed;
+    } else {
+      nextPos.x += Math.cos(playerRotation) * speed;
+      nextPos.z -= Math.sin(playerRotation) * speed;
+    }
+  } else {
+    keyPressTime.d = 0;
+  }
 
   // Apply rotation to player mesh
   player.rotation.y = playerRotation;

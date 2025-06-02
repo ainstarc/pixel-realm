@@ -5,6 +5,7 @@
  */
 
 import { storage } from "../core/storage.js";
+import packageJson from "../../package.json";
 
 export function setupSettingsMenu() {
   // Create settings icon
@@ -34,6 +35,33 @@ export function setupSettingsMenu() {
   settingsMenu.style.flexDirection = "column";
   settingsMenu.style.gap = "8px";
   settingsMenu.style.zIndex = "999";
+  settingsMenu.style.minWidth = "200px";
+
+  // Create section headers
+  const createSectionHeader = (text) => {
+    const header = document.createElement("div");
+    header.textContent = text;
+    header.style.color = "white";
+    header.style.fontWeight = "bold";
+    header.style.borderBottom = "1px solid rgba(255, 255, 255, 0.3)";
+    header.style.marginTop = "8px";
+    header.style.marginBottom = "8px";
+    header.style.paddingBottom = "4px";
+    return header;
+  };
+
+  // Create info text
+  const createInfoText = (text) => {
+    const info = document.createElement("div");
+    info.textContent = text;
+    info.style.color = "white";
+    info.style.fontSize = "12px";
+    info.style.marginBottom = "6px";
+    return info;
+  };
+
+  // Add Game Options section
+  settingsMenu.appendChild(createSectionHeader("Game Options"));
 
   // Create menu buttons
   const resetButton = createMenuButton("Reset World", () => {
@@ -43,18 +71,30 @@ export function setupSettingsMenu() {
     }
   });
 
+  // Add buttons to menu
+  settingsMenu.appendChild(resetButton);
+
+  // Add Help section
+  settingsMenu.appendChild(createSectionHeader("Help"));
+
+  const manualButton = createMenuButton("Controls", () => {
+    showControlsModal();
+  });
+
   const reportButton = createMenuButton("Report Issue", () => {
     window.open("https://github.com/ainstarc/pixel-realm/issues/", "_blank");
   });
 
-  const placeholderButton = createMenuButton("Coming Soon", () => {
-    alert("Feature coming soon!");
-  });
-
-  // Add buttons to menu
-  settingsMenu.appendChild(resetButton);
+  settingsMenu.appendChild(manualButton);
   settingsMenu.appendChild(reportButton);
-  settingsMenu.appendChild(placeholderButton);
+
+  // Add About section
+  settingsMenu.appendChild(createSectionHeader("About"));
+
+  // Version info
+  const version = packageJson.version || "0.11.0";
+  settingsMenu.appendChild(createInfoText(`Version: ${version}`));
+  settingsMenu.appendChild(createInfoText("© 2025 Pixel Realm"));
 
   // Toggle menu on icon click
   settingsIcon.addEventListener("click", () => {
@@ -89,8 +129,9 @@ function createMenuButton(text, onClick) {
   button.style.border = "none";
   button.style.borderRadius = "4px";
   button.style.cursor = "pointer";
-  button.style.width = "120px";
+  button.style.width = "100%";
   button.style.textAlign = "center";
+  button.style.marginBottom = "4px";
 
   button.addEventListener("mouseenter", () => {
     button.style.backgroundColor = "rgba(255, 255, 255, 0.3)";
@@ -103,4 +144,77 @@ function createMenuButton(text, onClick) {
   button.addEventListener("click", onClick);
 
   return button;
+}
+
+// Function to show controls modal
+function showControlsModal() {
+  // Create modal container
+  const modal = document.createElement("div");
+  modal.style.position = "fixed";
+  modal.style.top = "0";
+  modal.style.left = "0";
+  modal.style.width = "100%";
+  modal.style.height = "100%";
+  modal.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+  modal.style.display = "flex";
+  modal.style.justifyContent = "center";
+  modal.style.alignItems = "center";
+  modal.style.zIndex = "2000";
+
+  // Create modal content
+  const content = document.createElement("div");
+  content.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
+  content.style.padding = "20px";
+  content.style.borderRadius = "8px";
+  content.style.maxWidth = "400px";
+  content.style.width = "80%";
+  content.style.color = "white";
+  content.style.position = "relative";
+
+  // Create close button
+  const closeButton = document.createElement("div");
+  closeButton.textContent = "×";
+  closeButton.style.position = "absolute";
+  closeButton.style.top = "10px";
+  closeButton.style.right = "15px";
+  closeButton.style.fontSize = "24px";
+  closeButton.style.cursor = "pointer";
+  closeButton.style.color = "white";
+  closeButton.addEventListener("click", () => {
+    document.body.removeChild(modal);
+  });
+
+  // Create title
+  const title = document.createElement("h2");
+  title.textContent = "Game Controls";
+  title.style.marginTop = "0";
+  title.style.marginBottom = "15px";
+  title.style.textAlign = "center";
+
+  // Create controls list
+  const controlsList = document.createElement("div");
+  controlsList.innerHTML = `
+    <p><strong>WASD</strong> - Move and rotate (tap for rotation, hold for strafing)</p>
+    <p><strong>Space</strong> - Jump</p>
+    <p><strong>E</strong> - Place selected tile</p>
+    <p><strong>1-4</strong> - Select tile type (grass, dirt, sand, water)</p>
+    <p><strong>Arrow Keys</strong> - Alternative movement</p>
+  `;
+  controlsList.style.lineHeight = "1.5";
+
+  // Assemble modal
+  content.appendChild(closeButton);
+  content.appendChild(title);
+  content.appendChild(controlsList);
+  modal.appendChild(content);
+
+  // Add modal to DOM
+  document.body.appendChild(modal);
+
+  // Close modal when clicking outside content
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      document.body.removeChild(modal);
+    }
+  });
 }
