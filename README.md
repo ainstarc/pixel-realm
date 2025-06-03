@@ -11,6 +11,8 @@ A 3D voxel-based world building game built with Three.js.
 - Persistent world and player position
 - Mobile-friendly controls with joystick option
 - Enhanced settings menu with game information
+- Adaptive UI for both desktop and mobile devices
+- Smart instructions overlay with automatic dismissal on mobile
 
 ## Controls
 
@@ -32,6 +34,7 @@ A 3D voxel-based world building game built with Three.js.
 - **Jump Button**: Jump
 - **Place Button**: Place selected tile
 - **Tile Buttons**: Select tile type (grass, dirt, sand, water)
+- **Instructions**: Auto-dismisses after 3 seconds or on first touch
 
 ## Settings
 

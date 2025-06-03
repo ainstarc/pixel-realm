@@ -50,28 +50,69 @@ setupMobileControls();
 const hud = setupHUD();
 
 // Add instructions for mouse controls
-const instructions = document.createElement('div');
-instructions.className = 'ui';
-instructions.style.position = 'absolute';
-instructions.style.top = '50%';
-instructions.style.left = '50%';
-instructions.style.transform = 'translate(-50%, -50%)';
-instructions.style.color = 'white';
-instructions.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-instructions.style.padding = '20px';
-instructions.style.borderRadius = '5px';
-instructions.style.textAlign = 'center';
-instructions.style.fontFamily = 'Arial, sans-serif';
-instructions.style.zIndex = '1000';
-instructions.innerHTML = 'Click to enable mouse look<br>WASD to move<br>Space to jump<br>Left-click or E to place blocks<br>1-4 to select block type<br>Alt to temporarily show cursor';
+const instructions = document.createElement("div");
+instructions.className = "ui";
+instructions.style.position = "absolute";
+instructions.style.top = "50%";
+instructions.style.left = "50%";
+instructions.style.transform = "translate(-50%, -50%)";
+instructions.style.color = "white";
+instructions.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+instructions.style.padding = "20px";
+instructions.style.borderRadius = "5px";
+instructions.style.textAlign = "center";
+instructions.style.fontFamily = "Arial, sans-serif";
+instructions.style.zIndex = "1000";
+instructions.id = "instructions-overlay";
+
+// Check if mobile and if instructions were previously dismissed
+const isTouchDevice = "ontouchstart" in window;
+const settings = storage.loadSettings() || {};
+const instructionsDismissed = settings.instructionsDismissed;
+
+// Set appropriate content and behavior
+if (isTouchDevice) {
+  instructions.innerHTML =
+    "Tap and drag to move<br>Use buttons to jump and place blocks<br>Tap to dismiss";
+
+  // Don't show if previously dismissed
+  if (instructionsDismissed) {
+    instructions.style.display = "none";
+  } else {
+    // Auto-dismiss after 3 seconds
+    setTimeout(() => dismissInstructions(), 3000);
+
+    // Dismiss on tap
+    instructions.addEventListener("click", dismissInstructions);
+
+    // Dismiss on first touch anywhere
+    document.addEventListener("touchstart", dismissInstructions, {
+      once: true,
+    });
+  }
+} else {
+  instructions.innerHTML =
+    "Click to enable mouse look<br>WASD to move<br>Space to jump<br>Left-click or E to place blocks<br>1-4 to select block type<br>Alt to temporarily show cursor";
+}
+
 document.body.appendChild(instructions);
 
-// Hide instructions when pointer is locked
-document.addEventListener('pointerlockchange', () => {
+// Function to dismiss instructions
+function dismissInstructions() {
+  instructions.style.display = "none";
+
+  // Save dismissal state
+  const settings = storage.loadSettings() || {};
+  settings.instructionsDismissed = true;
+  storage.saveSettings(settings);
+}
+
+// Hide instructions when pointer is locked (for desktop)
+document.addEventListener("pointerlockchange", () => {
   if (document.pointerLockElement) {
-    instructions.style.display = 'none';
-  } else {
-    instructions.style.display = 'block';
+    instructions.style.display = "none";
+  } else if (!isTouchDevice && !instructionsDismissed) {
+    instructions.style.display = "block";
   }
 });
 
