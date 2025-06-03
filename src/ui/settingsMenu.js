@@ -6,11 +6,13 @@
 
 import { storage } from "../core/storage.js";
 import packageJson from "../../package.json";
+import { toggleControlType } from "./mobileControls.js";
 
 export function setupSettingsMenu() {
   // Create settings icon
   const settingsIcon = document.createElement("div");
   settingsIcon.id = "settings-icon";
+  settingsIcon.className = "ui";
   settingsIcon.innerHTML = "⚙️";
   settingsIcon.style.position = "absolute";
   settingsIcon.style.top = "10px";
@@ -25,6 +27,7 @@ export function setupSettingsMenu() {
   // Create settings menu (initially hidden)
   const settingsMenu = document.createElement("div");
   settingsMenu.id = "settings-menu";
+  settingsMenu.className = "ui";
   settingsMenu.style.position = "absolute";
   settingsMenu.style.top = "40px";
   settingsMenu.style.right = "10px";
@@ -74,6 +77,49 @@ export function setupSettingsMenu() {
   // Add buttons to menu
   settingsMenu.appendChild(resetButton);
 
+  // Add mobile controls toggle (only on touch devices)
+  if ('ontouchstart' in window) {
+    // Load current setting
+    const settings = storage.loadSettings() || {};
+    const useJoystick = settings.useJoystick || false;
+    
+    // Create toggle container
+    const toggleContainer = document.createElement("div");
+    toggleContainer.className = "ui";
+    toggleContainer.style.display = "flex";
+    toggleContainer.style.alignItems = "center";
+    toggleContainer.style.marginTop = "8px";
+    toggleContainer.style.marginBottom = "8px";
+    toggleContainer.style.color = "white";
+    
+    // Create checkbox
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = "toggleControls";
+    checkbox.className = "ui";
+    checkbox.checked = useJoystick;
+    checkbox.style.marginRight = "8px";
+    
+    // Create label
+    const label = document.createElement("label");
+    label.htmlFor = "toggleControls";
+    label.className = "ui";
+    label.textContent = "Use Joystick (instead of WASD buttons)";
+    label.style.fontSize = "14px";
+    
+    // Add event listener
+    checkbox.addEventListener("change", (e) => {
+      toggleControlType(e.target.checked);
+    });
+    
+    // Assemble toggle
+    toggleContainer.appendChild(checkbox);
+    toggleContainer.appendChild(label);
+    
+    // Add to menu
+    settingsMenu.appendChild(toggleContainer);
+  }
+
   // Add Help section
   settingsMenu.appendChild(createSectionHeader("Help"));
 
@@ -92,7 +138,7 @@ export function setupSettingsMenu() {
   settingsMenu.appendChild(createSectionHeader("About"));
 
   // Version info
-  const version = packageJson.version || "0.11.0";
+  const version = packageJson.version || "0.12.5";
   settingsMenu.appendChild(createInfoText(`Version: ${version}`));
   settingsMenu.appendChild(createInfoText("© 2025 Pixel Realm"));
 
@@ -123,6 +169,7 @@ export function setupSettingsMenu() {
 function createMenuButton(text, onClick) {
   const button = document.createElement("button");
   button.textContent = text;
+  button.className = "ui";
   button.style.padding = "8px 12px";
   button.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
   button.style.color = "white";
@@ -150,6 +197,7 @@ function createMenuButton(text, onClick) {
 function showControlsModal() {
   // Create modal container
   const modal = document.createElement("div");
+  modal.className = "ui";
   modal.style.position = "fixed";
   modal.style.top = "0";
   modal.style.left = "0";
@@ -163,6 +211,7 @@ function showControlsModal() {
 
   // Create modal content
   const content = document.createElement("div");
+  content.className = "ui";
   content.style.backgroundColor = "rgba(0, 0, 0, 0.9)";
   content.style.padding = "20px";
   content.style.borderRadius = "8px";
@@ -173,6 +222,7 @@ function showControlsModal() {
 
   // Create close button
   const closeButton = document.createElement("div");
+  closeButton.className = "ui";
   closeButton.textContent = "×";
   closeButton.style.position = "absolute";
   closeButton.style.top = "10px";
@@ -186,6 +236,7 @@ function showControlsModal() {
 
   // Create title
   const title = document.createElement("h2");
+  title.className = "ui";
   title.textContent = "Game Controls";
   title.style.marginTop = "0";
   title.style.marginBottom = "15px";
@@ -193,13 +244,43 @@ function showControlsModal() {
 
   // Create controls list
   const controlsList = document.createElement("div");
-  controlsList.innerHTML = `
-    <p><strong>WASD</strong> - Move and rotate (tap for rotation, hold for strafing)</p>
-    <p><strong>Space</strong> - Jump</p>
-    <p><strong>E</strong> - Place selected tile</p>
-    <p><strong>1-4</strong> - Select tile type (grass, dirt, sand, water)</p>
-    <p><strong>Arrow Keys</strong> - Alternative movement</p>
-  `;
+  controlsList.className = "ui";
+  
+  // Check if we're on mobile
+  if ('ontouchstart' in window) {
+    // Load current setting
+    const settings = storage.loadSettings() || {};
+    const useJoystick = settings.useJoystick || false;
+    
+    if (useJoystick) {
+      controlsList.innerHTML = `
+        <p><strong>Joystick</strong> - Move and rotate</p>
+        <p><strong>Jump Button</strong> - Jump</p>
+        <p><strong>Place Button</strong> - Place selected tile</p>
+        <p><strong>Tile Buttons</strong> - Select tile type (grass, dirt, sand, water)</p>
+      `;
+    } else {
+      controlsList.innerHTML = `
+        <p><strong>Arrow Buttons</strong> - Move and rotate</p>
+        <p><strong>Jump Button</strong> - Jump</p>
+        <p><strong>Place Button</strong> - Place selected tile</p>
+        <p><strong>Tile Buttons</strong> - Select tile type (grass, dirt, sand, water)</p>
+      `;
+    }
+  } else {
+    controlsList.innerHTML = `
+      <p><strong>Mouse</strong> - Look around (click to enable pointer lock)</p>
+      <p><strong>Left-click</strong> - Place selected tile (same as E key)</p>
+      <p><strong>WASD</strong> - Move (forward, left, backward, right)</p>
+      <p><strong>Space</strong> - Jump</p>
+      <p><strong>E</strong> - Place selected tile</p>
+      <p><strong>1-4</strong> - Select tile type (grass, dirt, sand, water)</p>
+      <p><strong>Alt</strong> - Hold to temporarily show cursor</p>
+      <p><strong>Escape</strong> - Exit pointer lock mode</p>
+      <p><strong>Arrow Keys</strong> - Alternative movement</p>
+    `;
+  }
+  
   controlsList.style.lineHeight = "1.5";
 
   // Assemble modal

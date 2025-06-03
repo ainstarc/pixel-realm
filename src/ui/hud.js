@@ -15,6 +15,7 @@ export function setupHUD() {
   // Create HUD container
   const hudContainer = document.createElement('div');
   hudContainer.id = 'hud';
+  hudContainer.className = 'ui';
   hudContainer.style.position = 'absolute';
   hudContainer.style.top = '10px';
   hudContainer.style.left = '10px';
@@ -31,6 +32,7 @@ export function setupHUD() {
   // Create tile selection display
   const tileDisplay = document.createElement('div');
   tileDisplay.id = 'tile-display';
+  tileDisplay.className = 'ui';
   tileDisplay.textContent = `Selected: ${capitalizeFirstLetter(gameState.selectedTileType)}`;
   
   // Add to DOM

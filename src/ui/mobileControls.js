@@ -3,18 +3,36 @@
  * 
  * Creates touch-friendly controls for mobile devices.
  * Includes movement pad, action buttons, and tile selection.
+ * Supports both joystick and button controls.
  */
 
 import { keys, keyPressed } from "../player/input.js";
 import { gameState } from "../core/gameState.js";
+import { storage } from "../core/storage.js";
+
+// Control state
+let useJoystick = false;
+let controlsDiv = null;
+let joystickDiv = null;
+let buttonsDiv = null;
+let joystickActive = false;
+let joystickStartPos = { x: 0, y: 0 };
+let joystickCurrentPos = { x: 0, y: 0 };
+let joystickHandle = null;
 
 // Mobile touch controls
 export function setupMobileControls() {
   // Only setup on touch devices
   if (!('ontouchstart' in window)) return;
   
-  const controlsDiv = document.createElement('div');
+  // Load user preference
+  const settings = storage.loadSettings() || {};
+  useJoystick = settings.useJoystick || false;
+  
+  // Create main container
+  controlsDiv = document.createElement('div');
   controlsDiv.id = 'mobile-controls';
+  controlsDiv.className = 'ui';
   controlsDiv.style.position = 'absolute';
   controlsDiv.style.bottom = '20px';
   controlsDiv.style.left = '0';
@@ -24,16 +42,42 @@ export function setupMobileControls() {
   controlsDiv.style.padding = '0 20px';
   controlsDiv.style.boxSizing = 'border-box';
   
-  // Movement pad
-  const moveDiv = document.createElement('div');
-  moveDiv.style.display = 'grid';
-  moveDiv.style.gridTemplateColumns = 'repeat(3, 60px)';
-  moveDiv.style.gridTemplateRows = 'repeat(3, 60px)';
-  moveDiv.style.gap = '5px';
+  // Create both control types
+  createButtonControls();
+  createJoystickControls();
+  
+  // Action buttons (common to both control types)
+  const actionDiv = createActionButtons();
+  
+  // Add to DOM
+  controlsDiv.appendChild(useJoystick ? joystickDiv : buttonsDiv);
+  controlsDiv.appendChild(actionDiv);
+  document.body.appendChild(controlsDiv);
+  
+  // Prevent page scrolling when touching the controls
+  controlsDiv.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
+  
+  // Add mobile class to body for CSS adjustments
+  document.body.classList.add('mobile');
+  
+  return controlsDiv;
+}
+
+// Create traditional button controls
+function createButtonControls() {
+  buttonsDiv = document.createElement('div');
+  buttonsDiv.className = 'ui';
+  buttonsDiv.style.display = 'grid';
+  buttonsDiv.style.gridTemplateColumns = 'repeat(3, 60px)';
+  buttonsDiv.style.gridTemplateRows = 'repeat(3, 60px)';
+  buttonsDiv.style.gap = '5px';
   
   // Create movement buttons
   const createButton = (text, key, gridArea) => {
     const btn = document.createElement('button');
+    btn.className = 'ui';
     btn.textContent = text;
     btn.style.gridArea = gridArea;
     btn.style.width = '100%';
@@ -59,9 +103,55 @@ export function setupMobileControls() {
     return btn;
   };
   
+  // Movement buttons - updated for directional movement
+  buttonsDiv.appendChild(createButton('↑', 'w', '1 / 2 / 2 / 3')); // Forward
+  buttonsDiv.appendChild(createButton('←', 'a', '2 / 1 / 3 / 2')); // Rotate left
+  buttonsDiv.appendChild(createButton('↓', 's', '2 / 2 / 3 / 3')); // Backward
+  buttonsDiv.appendChild(createButton('→', 'd', '2 / 3 / 3 / 4')); // Rotate right
+}
+
+// Create joystick controls
+function createJoystickControls() {
+  joystickDiv = document.createElement('div');
+  joystickDiv.className = 'ui';
+  joystickDiv.style.position = 'relative';
+  joystickDiv.style.width = '120px';
+  joystickDiv.style.height = '120px';
+  joystickDiv.style.backgroundColor = 'rgba(255,255,255,0.2)';
+  joystickDiv.style.borderRadius = '60px';
+  joystickDiv.style.marginBottom = '20px';
+  
+  // Create joystick handle
+  joystickHandle = document.createElement('div');
+  joystickHandle.className = 'ui';
+  joystickHandle.style.position = 'absolute';
+  joystickHandle.style.width = '50px';
+  joystickHandle.style.height = '50px';
+  joystickHandle.style.backgroundColor = 'rgba(255,255,255,0.5)';
+  joystickHandle.style.borderRadius = '25px';
+  joystickHandle.style.top = '35px';
+  joystickHandle.style.left = '35px';
+  joystickHandle.style.transform = 'translate(0, 0)';
+  joystickDiv.appendChild(joystickHandle);
+  
+  // Joystick touch events
+  joystickDiv.addEventListener('touchstart', handleJoystickStart, { passive: false });
+  joystickDiv.addEventListener('touchmove', handleJoystickMove, { passive: false });
+  joystickDiv.addEventListener('touchend', handleJoystickEnd, { passive: false });
+}
+
+// Create action buttons (common to both control types)
+function createActionButtons() {
+  const actionDiv = document.createElement('div');
+  actionDiv.className = 'ui';
+  actionDiv.style.display = 'flex';
+  actionDiv.style.flexDirection = 'column';
+  actionDiv.style.gap = '10px';
+  
   // Create action button that triggers keyPressed events
   const createActionButton = (text, key, width, height) => {
     const btn = document.createElement('button');
+    btn.className = 'ui';
     btn.textContent = text;
     btn.style.width = width || '80px';
     btn.style.height = height || '80px';
@@ -90,6 +180,7 @@ export function setupMobileControls() {
   // Create tile selection button
   const createTileButton = (text, tileType) => {
     const btn = document.createElement('button');
+    btn.className = 'ui';
     btn.textContent = text;
     btn.style.width = '50px';
     btn.style.height = '50px';
@@ -110,27 +201,14 @@ export function setupMobileControls() {
     return btn;
   };
   
-  // Movement buttons - updated for directional movement
-  moveDiv.appendChild(createButton('↑', 'w', '1 / 2 / 2 / 3')); // Forward
-  moveDiv.appendChild(createButton('←', 'a', '2 / 1 / 3 / 2')); // Rotate left
-  moveDiv.appendChild(createButton('↓', 's', '2 / 2 / 3 / 3')); // Backward
-  moveDiv.appendChild(createButton('→', 'd', '2 / 3 / 3 / 4')); // Rotate right
-  
-  // Action buttons
-  const actionDiv = document.createElement('div');
-  actionDiv.style.display = 'flex';
-  actionDiv.style.flexDirection = 'column';
-  actionDiv.style.gap = '10px';
-  
   // Main action buttons
   const mainActions = document.createElement('div');
+  mainActions.className = 'ui';
   mainActions.style.display = 'flex';
   mainActions.style.gap = '10px';
   
   // Jump button - increased size for better usability
-  const jumpBtn = createButton('Jump', ' ', '');
-  jumpBtn.style.width = '80px';
-  jumpBtn.style.height = '80px';
+  const jumpBtn = createActionButton('Jump', ' ', '80px', '80px');
   mainActions.appendChild(jumpBtn);
   
   // Place button - using createActionButton to trigger keyPressed
@@ -141,6 +219,7 @@ export function setupMobileControls() {
   
   // Tile selection row
   const tileSelectionDiv = document.createElement('div');
+  tileSelectionDiv.className = 'ui';
   tileSelectionDiv.style.display = 'flex';
   tileSelectionDiv.style.justifyContent = 'center';
   tileSelectionDiv.style.marginTop = '10px';
@@ -153,18 +232,113 @@ export function setupMobileControls() {
   
   actionDiv.appendChild(tileSelectionDiv);
   
-  // Add to DOM
-  controlsDiv.appendChild(moveDiv);
-  controlsDiv.appendChild(actionDiv);
-  document.body.appendChild(controlsDiv);
+  return actionDiv;
+}
+
+// Joystick event handlers
+function handleJoystickStart(e) {
+  e.preventDefault();
+  joystickActive = true;
   
-  // Prevent page scrolling when touching the controls
-  controlsDiv.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-  }, { passive: false });
+  const touch = e.touches[0];
+  const rect = joystickDiv.getBoundingClientRect();
+  joystickStartPos = {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  };
+  joystickCurrentPos = { ...joystickStartPos };
+}
+
+function handleJoystickMove(e) {
+  if (!joystickActive) return;
+  e.preventDefault();
   
-  // Add mobile class to body for CSS adjustments
-  document.body.classList.add('mobile');
+  const touch = e.touches[0];
+  const rect = joystickDiv.getBoundingClientRect();
+  joystickCurrentPos = {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  };
   
-  return controlsDiv;
+  // Calculate joystick displacement
+  let deltaX = joystickCurrentPos.x - joystickStartPos.x;
+  let deltaY = joystickCurrentPos.y - joystickStartPos.y;
+  
+  // Limit to circle
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  const maxDistance = 35; // Max joystick travel distance
+  
+  if (distance > maxDistance) {
+    deltaX = (deltaX / distance) * maxDistance;
+    deltaY = (deltaY / distance) * maxDistance;
+  }
+  
+  // Update joystick handle position
+  joystickHandle.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+  
+  // Convert joystick position to key presses
+  // Forward/backward (W/S)
+  if (deltaY < -10) {
+    keys['w'] = true;
+    keys['s'] = false;
+  } else if (deltaY > 10) {
+    keys['w'] = false;
+    keys['s'] = true;
+  } else {
+    keys['w'] = false;
+    keys['s'] = false;
+  }
+  
+  // Left/right (A/D)
+  if (deltaX < -10) {
+    keys['a'] = true;
+    keys['d'] = false;
+  } else if (deltaX > 10) {
+    keys['a'] = false;
+    keys['d'] = true;
+  } else {
+    keys['a'] = false;
+    keys['d'] = false;
+  }
+}
+
+function handleJoystickEnd(e) {
+  e.preventDefault();
+  joystickActive = false;
+  
+  // Reset joystick handle position
+  joystickHandle.style.transform = 'translate(0, 0)';
+  
+  // Reset all movement keys
+  keys['w'] = false;
+  keys['a'] = false;
+  keys['s'] = false;
+  keys['d'] = false;
+}
+
+// Toggle between joystick and button controls
+export function toggleControlType(useJoystickControls) {
+  if (!controlsDiv) return;
+  
+  useJoystick = useJoystickControls;
+  
+  // Save preference
+  const settings = storage.loadSettings() || {};
+  settings.useJoystick = useJoystick;
+  storage.saveSettings(settings);
+  
+  // Remove current control element
+  const currentControl = controlsDiv.firstChild;
+  if (currentControl) {
+    controlsDiv.removeChild(currentControl);
+  }
+  
+  // Add new control element
+  controlsDiv.insertBefore(useJoystick ? joystickDiv : buttonsDiv, controlsDiv.firstChild);
+  
+  // Reset all movement keys
+  keys['w'] = false;
+  keys['a'] = false;
+  keys['s'] = false;
+  keys['d'] = false;
 }
