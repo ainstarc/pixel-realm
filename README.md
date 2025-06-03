@@ -9,11 +9,12 @@ A 3D voxel-based world building game built with Three.js.
 - Player movement and camera controls with mouse support
 - Tile placement and editing
 - Persistent world and player position
-- Mobile-friendly controls
+- Mobile-friendly controls with joystick option
 - Enhanced settings menu with game information
 
 ## Controls
 
+### Desktop
 - **Mouse**: Look around (click to enable pointer lock)
 - **Left-click**: Place selected tile (same as E key)
 - **WASD**: Move (forward, left, backward, right)
@@ -22,13 +23,23 @@ A 3D voxel-based world building game built with Three.js.
 - **Space**: Jump
 - **E**: Place selected tile
 - **1-4**: Select tile type (grass, dirt, sand, water)
+- **Alt**: Hold to temporarily show cursor
+- **Escape**: Exit pointer lock mode
 - **Arrow Keys**: Alternative movement
+
+### Mobile
+- **Joystick or WASD buttons**: Move and rotate (toggle in settings)
+- **Jump Button**: Jump
+- **Place Button**: Place selected tile
+- **Tile Buttons**: Select tile type (grass, dirt, sand, water)
 
 ## Settings
 
 Access the settings menu by clicking the gear icon (⚙️) in the top-right corner:
 
-- **Game Options**: Reset world data
+- **Game Options**: 
+  - Reset world data
+  - Toggle between joystick and WASD buttons (mobile only)
 - **Help**: View controls and report issues
 - **About**: Version information
 

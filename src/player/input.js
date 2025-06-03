@@ -5,6 +5,7 @@ export const keyPressed = {}; // Track if key was just pressed this frame
 export let isPointerLocked = false;
 export let mouseMovement = { x: 0, y: 0 }; // Track mouse movement
 export let mouseClicked = false; // Track mouse click
+let wasPointerLockedBeforeAlt = false; // Track if pointer was locked before Alt key
 
 export function setupInput() {
   // Keyboard input
@@ -26,10 +27,27 @@ export function setupInput() {
       }
     }
     keys[key] = true;
+    
+    // Handle Alt key for temporary cursor access
+    if (e.key === "Alt" && document.pointerLockElement) {
+      wasPointerLockedBeforeAlt = true;
+      document.exitPointerLock();
+    }
   });
 
   window.addEventListener("keyup", (e) => {
     keys[e.key.toLowerCase()] = false;
+    
+    // Re-lock pointer when Alt is released
+    if (e.key === "Alt" && wasPointerLockedBeforeAlt) {
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        canvas.requestPointerLock();
+      } else {
+        document.body.requestPointerLock();
+      }
+      wasPointerLockedBeforeAlt = false;
+    }
   });
 
   // Mouse movement for camera control
@@ -57,11 +75,17 @@ export function setupInput() {
   // Track pointer lock state
   document.addEventListener("pointerlockchange", () => {
     isPointerLocked = document.pointerLockElement === document.body;
+    
+    // Reset Alt tracking if pointer lock is manually exited (e.g., with Escape)
+    if (!isPointerLocked && wasPointerLockedBeforeAlt) {
+      wasPointerLockedBeforeAlt = false;
+    }
   });
 
   // Handle pointer lock errors
   document.addEventListener("pointerlockerror", () => {
     console.error("Pointer lock failed");
+    wasPointerLockedBeforeAlt = false;
   });
 }
 

@@ -2,6 +2,22 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.12.4]
+
+### Added
+- Temporary cursor access with Alt key
+- Hold Alt to temporarily exit pointer lock
+- Auto re-enter pointer lock when Alt is released
+- Escape key still works for permanent pointer lock exit
+
+## [0.12.3]
+
+### Added
+- Mobile joystick control option
+- Toggle in settings to switch between joystick and WASD buttons
+- Persistent control preference using localStorage
+- Updated controls modal to show relevant controls based on selected mode
+
 ## [0.12.2]
 
 ### Added
