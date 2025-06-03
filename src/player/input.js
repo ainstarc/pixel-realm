@@ -6,6 +6,7 @@ export let isPointerLocked = false;
 export let mouseMovement = { x: 0, y: 0 }; // Track mouse movement
 export let mouseClicked = false; // Track mouse click
 let wasPointerLockedBeforeAlt = false; // Track if pointer was locked before Alt key
+let isHoveringUI = false; // Track if mouse is over UI elements
 
 export function setupInput() {
   // Keyboard input
@@ -29,7 +30,7 @@ export function setupInput() {
     keys[key] = true;
     
     // Handle Alt key for temporary cursor access
-    if (e.key === "Alt" && document.pointerLockElement) {
+    if (e.key === "Alt" && document.pointerLockElement && !isHoveringUI) {
       wasPointerLockedBeforeAlt = true;
       document.exitPointerLock();
     }
@@ -38,8 +39,8 @@ export function setupInput() {
   window.addEventListener("keyup", (e) => {
     keys[e.key.toLowerCase()] = false;
     
-    // Re-lock pointer when Alt is released
-    if (e.key === "Alt" && wasPointerLockedBeforeAlt) {
+    // Re-lock pointer when Alt is released, but only if not hovering UI
+    if (e.key === "Alt" && wasPointerLockedBeforeAlt && !isHoveringUI) {
       const canvas = document.querySelector('canvas');
       if (canvas) {
         canvas.requestPointerLock();
@@ -47,6 +48,21 @@ export function setupInput() {
         document.body.requestPointerLock();
       }
       wasPointerLockedBeforeAlt = false;
+    }
+  });
+
+  // Detect when hovering over UI elements
+  document.addEventListener("mouseover", (e) => {
+    const target = e.target;
+    isHoveringUI = target.closest(".ui") !== null;
+  });
+
+  // Block pointer re-lock on click when over UI
+  document.addEventListener("click", (e) => {
+    const isClickingUI = e.target.closest(".ui");
+    if (isClickingUI) {
+      e.stopPropagation();
+      isHoveringUI = true;
     }
   });
 
@@ -62,9 +78,9 @@ export function setupInput() {
   // Click to lock pointer or place tile
   document.addEventListener("mousedown", (e) => {
     if (e.button === 0) { // Left click
-      if (!isPointerLocked) {
+      if (!isPointerLocked && !isHoveringUI) {
         document.body.requestPointerLock();
-      } else {
+      } else if (isPointerLocked) {
         // Simulate 'E' key press for tile placement
         keyPressed["e"] = true;
         mouseClicked = true;

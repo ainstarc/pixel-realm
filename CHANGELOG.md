@@ -2,6 +2,14 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.12.5]
+
+### Added
+- Improved UI interaction with pointer lock
+- Added UI detection to prevent pointer lock when interacting with menus
+- Added 'ui' class to all UI elements for proper detection
+- Cursor now stays visible when hovering over UI elements
+
 ## [0.12.4]
 
 ### Added

@@ -32,6 +32,7 @@ export function setupMobileControls() {
   // Create main container
   controlsDiv = document.createElement('div');
   controlsDiv.id = 'mobile-controls';
+  controlsDiv.className = 'ui';
   controlsDiv.style.position = 'absolute';
   controlsDiv.style.bottom = '20px';
   controlsDiv.style.left = '0';
@@ -67,6 +68,7 @@ export function setupMobileControls() {
 // Create traditional button controls
 function createButtonControls() {
   buttonsDiv = document.createElement('div');
+  buttonsDiv.className = 'ui';
   buttonsDiv.style.display = 'grid';
   buttonsDiv.style.gridTemplateColumns = 'repeat(3, 60px)';
   buttonsDiv.style.gridTemplateRows = 'repeat(3, 60px)';
@@ -75,6 +77,7 @@ function createButtonControls() {
   // Create movement buttons
   const createButton = (text, key, gridArea) => {
     const btn = document.createElement('button');
+    btn.className = 'ui';
     btn.textContent = text;
     btn.style.gridArea = gridArea;
     btn.style.width = '100%';
@@ -110,6 +113,7 @@ function createButtonControls() {
 // Create joystick controls
 function createJoystickControls() {
   joystickDiv = document.createElement('div');
+  joystickDiv.className = 'ui';
   joystickDiv.style.position = 'relative';
   joystickDiv.style.width = '120px';
   joystickDiv.style.height = '120px';
@@ -119,6 +123,7 @@ function createJoystickControls() {
   
   // Create joystick handle
   joystickHandle = document.createElement('div');
+  joystickHandle.className = 'ui';
   joystickHandle.style.position = 'absolute';
   joystickHandle.style.width = '50px';
   joystickHandle.style.height = '50px';
@@ -138,6 +143,7 @@ function createJoystickControls() {
 // Create action buttons (common to both control types)
 function createActionButtons() {
   const actionDiv = document.createElement('div');
+  actionDiv.className = 'ui';
   actionDiv.style.display = 'flex';
   actionDiv.style.flexDirection = 'column';
   actionDiv.style.gap = '10px';
@@ -145,6 +151,7 @@ function createActionButtons() {
   // Create action button that triggers keyPressed events
   const createActionButton = (text, key, width, height) => {
     const btn = document.createElement('button');
+    btn.className = 'ui';
     btn.textContent = text;
     btn.style.width = width || '80px';
     btn.style.height = height || '80px';
@@ -173,6 +180,7 @@ function createActionButtons() {
   // Create tile selection button
   const createTileButton = (text, tileType) => {
     const btn = document.createElement('button');
+    btn.className = 'ui';
     btn.textContent = text;
     btn.style.width = '50px';
     btn.style.height = '50px';
@@ -195,6 +203,7 @@ function createActionButtons() {
   
   // Main action buttons
   const mainActions = document.createElement('div');
+  mainActions.className = 'ui';
   mainActions.style.display = 'flex';
   mainActions.style.gap = '10px';
   
@@ -210,6 +219,7 @@ function createActionButtons() {
   
   // Tile selection row
   const tileSelectionDiv = document.createElement('div');
+  tileSelectionDiv.className = 'ui';
   tileSelectionDiv.style.display = 'flex';
   tileSelectionDiv.style.justifyContent = 'center';
   tileSelectionDiv.style.marginTop = '10px';

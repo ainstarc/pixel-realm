@@ -51,6 +51,7 @@ const hud = setupHUD();
 
 // Add instructions for mouse controls
 const instructions = document.createElement('div');
+instructions.className = 'ui';
 instructions.style.position = 'absolute';
 instructions.style.top = '50%';
 instructions.style.left = '50%';
@@ -62,7 +63,7 @@ instructions.style.borderRadius = '5px';
 instructions.style.textAlign = 'center';
 instructions.style.fontFamily = 'Arial, sans-serif';
 instructions.style.zIndex = '1000';
-instructions.innerHTML = 'Click to enable mouse look<br>WASD to move<br>Space to jump<br>Left-click or E to place blocks<br>1-4 to select block type';
+instructions.innerHTML = 'Click to enable mouse look<br>WASD to move<br>Space to jump<br>Left-click or E to place blocks<br>1-4 to select block type<br>Alt to temporarily show cursor';
 document.body.appendChild(instructions);
 
 // Hide instructions when pointer is locked
