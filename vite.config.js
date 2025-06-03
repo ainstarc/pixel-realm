@@ -10,6 +10,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   base: '/pixel-realm/', // Must match your repository name
   build: {
-    outDir: 'dist',
+    outDir: 'dist'
   }
 });

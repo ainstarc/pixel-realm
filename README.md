@@ -6,17 +6,19 @@ A 3D voxel-based world building game built with Three.js.
 
 - 3D voxel-based world
 - Different tile types (grass, dirt, sand, water)
-- Player movement and camera controls
+- Player movement and camera controls with mouse support
 - Tile placement and editing
 - Persistent world and player position
-- Progressive Web App (PWA) support for offline play
 - Mobile-friendly controls
 - Enhanced settings menu with game information
 
 ## Controls
 
-- **WASD**: Move and rotate
-  - Tap for rotation, hold for strafing
+- **Mouse**: Look around (click to enable pointer lock)
+- **Left-click**: Place selected tile (same as E key)
+- **WASD**: Move (forward, left, backward, right)
+  - With mouse look: A/D always strafe
+  - Without mouse: Tap A/D for rotation, hold for strafing
 - **Space**: Jump
 - **E**: Place selected tile
 - **1-4**: Select tile type (grass, dirt, sand, water)
@@ -39,20 +41,13 @@ Access the settings menu by clicking the gear icon (⚙️) in the top-right cor
 
 ## Deployment
 
-The game is automatically deployed to GitHub Pages when changes are pushed to the main branch.
-
-You can also manually deploy:
+The game can be built for deployment:
 
 ```
 npm run build
-npm run deploy
 ```
 
 The built files will be in the `dist` directory.
-
-## PWA Support
-
-Pixel Realm works offline as a Progressive Web App. You can install it on your device from the browser.
 
 ## License
 

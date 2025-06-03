@@ -49,6 +49,31 @@ setupSettingsMenu();
 setupMobileControls();
 const hud = setupHUD();
 
+// Add instructions for mouse controls
+const instructions = document.createElement('div');
+instructions.style.position = 'absolute';
+instructions.style.top = '50%';
+instructions.style.left = '50%';
+instructions.style.transform = 'translate(-50%, -50%)';
+instructions.style.color = 'white';
+instructions.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+instructions.style.padding = '20px';
+instructions.style.borderRadius = '5px';
+instructions.style.textAlign = 'center';
+instructions.style.fontFamily = 'Arial, sans-serif';
+instructions.style.zIndex = '1000';
+instructions.innerHTML = 'Click to enable mouse look<br>WASD to move<br>Space to jump<br>Left-click or E to place blocks<br>1-4 to select block type';
+document.body.appendChild(instructions);
+
+// Hide instructions when pointer is locked
+document.addEventListener('pointerlockchange', () => {
+  if (document.pointerLockElement) {
+    instructions.style.display = 'none';
+  } else {
+    instructions.style.display = 'block';
+  }
+});
+
 // Animate
 function animate() {
   requestAnimationFrame(animate);

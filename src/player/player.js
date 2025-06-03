@@ -8,7 +8,7 @@
 
 import * as THREE from "three";
 import { gameState } from "../core/gameState.js";
-import { keyPressed } from "./input.js";
+import { keyPressed, mouseMovement, isPointerLocked } from "./input.js";
 import { storage } from "../core/storage.js";
 
 // Track the currently highlighted tile
@@ -120,6 +120,33 @@ function getPlayerTileIndex(playerPos, mapSize) {
 }
 
 /**
+ * Gets the tile index in front of the player
+ * @param {THREE.Vector3} playerPos - Player position
+ * @param {number} rotation - Player rotation in radians
+ * @param {number} mapSize - Size of the map
+ * @returns {Object} - Object with x, y, and z indices
+ */
+function getFrontTileIndex(playerPos, rotation, mapSize) {
+  const half = mapSize / 2;
+  
+  // Calculate position in front of player
+  const frontX = playerPos.x - Math.sin(rotation);
+  const frontZ = playerPos.z - Math.cos(rotation);
+  
+  // Convert to tile indices
+  const x = Math.floor(frontX + half);
+  const y = 0; // Currently only working with the top layer
+  const z = Math.floor(frontZ + half);
+
+  // Clamp indexes in range
+  return {
+    x: Math.max(0, Math.min(mapSize - 1, x)),
+    y: y,
+    z: Math.max(0, Math.min(mapSize - 1, z)),
+  };
+}
+
+/**
  * Updates the preview tile material based on selected tile type
  */
 function updatePreviewMaterial() {
@@ -148,6 +175,7 @@ function updatePreviewMaterial() {
 export function updatePlayerMovement(player, keys, camera) {
   const speed = 0.05;
   const rotationSpeed = 0.03;
+  const mouseSensitivity = 0.002;
   const gravity = 0.005; // Reduced gravity for slower fall
   const jumpStrength = 0.15;
   const camDistance = 2;
@@ -155,12 +183,19 @@ export function updatePlayerMovement(player, keys, camera) {
 
   const nextPos = player.position.clone();
 
+  // Handle mouse rotation if pointer is locked
+  if (isPointerLocked && mouseMovement.x !== 0) {
+    playerRotation -= mouseMovement.x * mouseSensitivity;
+  }
+
   // Rotate player with A and D keys
   if (keys["a"]) {
     keyPressTime.a++;
-    if (keyPressTime.a < STRAFE_THRESHOLD) {
+    if (keyPressTime.a < STRAFE_THRESHOLD && !isPointerLocked) {
+      // Only rotate with keys if not using mouse look
       playerRotation += rotationSpeed;
     } else {
+      // Always strafe when using mouse look or after threshold
       nextPos.x -= Math.cos(playerRotation) * speed;
       nextPos.z += Math.sin(playerRotation) * speed;
     }
@@ -169,9 +204,11 @@ export function updatePlayerMovement(player, keys, camera) {
   }
   if (keys["d"]) {
     keyPressTime.d++;
-    if (keyPressTime.d < STRAFE_THRESHOLD) {
+    if (keyPressTime.d < STRAFE_THRESHOLD && !isPointerLocked) {
+      // Only rotate with keys if not using mouse look
       playerRotation -= rotationSpeed;
     } else {
+      // Always strafe when using mouse look or after threshold
       nextPos.x += Math.cos(playerRotation) * speed;
       nextPos.z -= Math.sin(playerRotation) * speed;
     }
@@ -192,9 +229,10 @@ export function updatePlayerMovement(player, keys, camera) {
     nextPos.z += Math.cos(playerRotation) * speed;
   }
 
-  // Highlight the current tile
+  // Highlight the tile in front of the player
   if (gameState.mapData && gameState.tiles && gameState.materials) {
-    const { x, y, z } = getPlayerTileIndex(player.position, 32);
+    // Get the tile index in front of the player
+    const { x, y, z } = getFrontTileIndex(player.position, playerRotation, 32);
 
     // Make sure indices are valid
     if (
