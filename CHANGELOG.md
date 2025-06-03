@@ -2,6 +2,14 @@
 
 All notable changes to Pixel Realm will be documented in this file.
 
+## [0.12.6]
+
+### Added
+- Improved mobile experience with automatic instructions dismissal
+- Instructions overlay now automatically dismisses after 3 seconds on mobile devices
+- Added touch input detection to dismiss instructions on first interaction
+- Implemented persistent dismissal using localStorage
+
 ## [0.12.5]
 
 ### Added
