@@ -4,6 +4,12 @@ All notable changes to **Pixel Realm** will be documented here.
 
 ---
 
+## [0.13.0] - Camera Drag Look
+
+### Added
+
+- Added mouse and touch drag look support for camera rotation; fixed touchmove event for smoother mobile experience.
+
 ## [0.12.7] – Modularity Phase 2
 
 ### Internal Restructure

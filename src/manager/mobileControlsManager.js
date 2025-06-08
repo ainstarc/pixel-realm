@@ -5,6 +5,7 @@ import {
 } from "../ui/mobileControls/joystick.js";
 import { createActionButtons } from "../ui/mobileControls/actions.js";
 import { controlsState } from "../ui/mobileControls/state.js";
+import {setupLookDragArea } from "../ui/mobileControls/lookDrag.js";
 import { storageManager } from "./storageManager.js";
 
 export function setupMobileControls() {
@@ -29,6 +30,7 @@ export function setupMobileControls() {
   controlsState.controlsDiv = controlsDiv;
   controlsState.buttonsDiv = createButtonControls();
   controlsState.joystickDiv = createJoystickControls();
+  setupLookDragArea();
   const actionDiv = createActionButtons();
 
   controlsDiv.appendChild(

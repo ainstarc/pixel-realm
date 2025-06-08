@@ -1,8 +1,8 @@
-import { scene, camera, renderer } from "./setup/init/scene.js";
+import {scene, playerCameraGroup, renderer, playerCamera} from "./setup/init/scene.js";
 import { initGame } from "./manager/setupManager.js";
 import { setupInstructions } from "./setup/init/instructions.js";
 import { startGameLoop } from "./loop/animate.js";
 
-initGame(scene, camera);
+initGame(scene, playerCamera);
 setupInstructions();
-startGameLoop(camera, scene, renderer);
+startGameLoop(playerCamera, scene, renderer);
