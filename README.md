@@ -1,68 +1,110 @@
 # Pixel Realm
 
-A 3D voxel-based world building game built with Three.js.
+A 3D voxel-based world building game built with [Three.js](https://threejs.org/), designed for both desktop and mobile play. Build, explore, and interact with a dynamic tile-based environment in real time.
 
-## Features
+---
 
-- 3D voxel-based world
-- Different tile types (grass, dirt, sand, water)
-- Player movement and camera controls with mouse support
-- Tile placement and editing
-- Persistent world and player position
-- Mobile-friendly controls with joystick option
-- Enhanced settings menu with game information
-- Adaptive UI for both desktop and mobile devices
-- Smart instructions overlay with automatic dismissal on mobile
+## 🧩 Features
 
-## Controls
+- 3D voxel-based sandbox environment
+- Multiple tile types: **grass**, **dirt**, **sand**, **water**
+- Smooth **player movement** with mouse and keyboard support
+- Real-time **tile placement and destruction**
+- **Persistent world** and player state using local storage
+- **Mobile-friendly controls**: joystick or WASD buttons
+- Responsive **UI with adaptive layout** across devices
+- Customizable **settings menu** with game controls and metadata
+- Onboarding with **smart instructions overlay** for new players
 
-### Desktop
-- **Mouse**: Look around (click to enable pointer lock)
-- **Left-click**: Place selected tile (same as E key)
-- **WASD**: Move (forward, left, backward, right)
-  - With mouse look: A/D always strafe
-  - Without mouse: Tap A/D for rotation, hold for strafing
-- **Space**: Jump
-- **E**: Place selected tile
-- **1-4**: Select tile type (grass, dirt, sand, water)
-- **Alt**: Hold to temporarily show cursor
-- **Escape**: Exit pointer lock mode
-- **Arrow Keys**: Alternative movement
+---
 
-### Mobile
-- **Joystick or WASD buttons**: Move and rotate (toggle in settings)
-- **Jump Button**: Jump
-- **Place Button**: Place selected tile
-- **Tile Buttons**: Select tile type (grass, dirt, sand, water)
-- **Instructions**: Auto-dismisses after 3 seconds or on first touch
+## 🎮 Controls
 
-## Settings
+### 🖥️ Desktop
 
-Access the settings menu by clicking the gear icon (⚙️) in the top-right corner:
+| Action             | Input                                   |
+| ------------------ | --------------------------------------- |
+| Move               | `W`, `A`, `S`, `D`                      |
+| Jump               | `Space`                                 |
+| Look around        | Move mouse (click to lock)              |
+| Place tile         | `E` or Left-click                       |
+| Select tile        | `1`–`4`                                 |
+| Unlock mouse       | `Escape`                                |
+| Show cursor (hold) | `Alt`                                   |
+| Alternative move   | Arrow keys                              |
+| A/D behavior       | Strafe with mouse locked, rotate if not |
 
-- **Game Options**: 
-  - Reset world data
-  - Toggle between joystick and WASD buttons (mobile only)
-- **Help**: View controls and report issues
-- **About**: Version information
+### 📱 Mobile
 
-## Development
+| Action       | Input                      |
+| ------------ | -------------------------- |
+| Move/Rotate  | Joystick or WASD buttons   |
+| Jump         | Tap jump button            |
+| Place tile   | Tap place button           |
+| Select tile  | Tap tile icon              |
+| Dismiss help | Auto-dismiss or tap screen |
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run dev`
-4. Open your browser at `http://localhost:5173`
+---
 
-## Deployment
+## ⚙️ Settings Menu
 
-The game can be built for deployment:
+Accessible via the gear icon (⚙️) in the top-right corner:
 
+- **Game Options**
+  - Reset all game data
+  - Toggle control scheme (joystick ↔ WASD) on mobile
+- **Help**
+  - View control guide
+  - Report issues
+- **About**
+  - Display version info
+
+---
+
+## 🚧 Development
+
+To get started locally:
+
+```bash
+git clone https://github.com/your-username/pixel-realm.git
+cd pixel-realm
+npm install
+npm run dev
 ```
+
+Then open your browser at [`http://localhost:5173`](http://localhost:5173)
+
+---
+
+## 🚀 Deployment
+
+To generate a production build:
+
+```bash
 npm run build
 ```
 
-The built files will be in the `dist` directory.
+Build files will be output to the `dist/` folder.
 
-## License
+---
 
-MIT
+## 📁 Project Structure Overview
+
+```
+src/
+├─ core/              # Game state, assets, and storage logic
+├─ manager/           # Central managers coordinating systems
+├─ player/            # Player logic, controls, input, and camera
+├─ ui/                # HUD, settings menu, and mobile controls
+├─ world/             # World generation, tiles, and helpers
+├─ setup/             # Scene and game initialization
+├─ loop/              # Game loop (animation)
+├─ game.js            # Entry point for game logic
+└─ index.js           # App initialization
+```
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)
