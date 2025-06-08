@@ -1,11 +1,3 @@
-/**
- * Player module for Pixel Realm
- *
- * Handles player creation, movement, and interaction with the world.
- * Includes tile highlighting, preview system, and tile placement.
- * Also manages persistence of player position and map data.
- */
-
 import * as THREE from "three";
 import { gameState } from "../core/gameState.js";
 import { keyPressed, mouseMovement, isPointerLocked } from "./input.js";
@@ -24,10 +16,6 @@ let playerRotation = 0; // Player facing direction in radians
 let keyPressTime = { a: 0, d: 0 };
 const STRAFE_THRESHOLD = 15; // Frames to hold before strafing
 
-/**
- * Map tile types to numeric values for storage
- * This allows efficient storage in localStorage
- */
 const TILE_TYPES = {
   grass: 0,
   dirt: 1,
@@ -35,10 +23,6 @@ const TILE_TYPES = {
   water: 3,
 };
 
-/**
- * Map numeric values back to tile type names
- * Used when loading saved map data
- */
 const TILE_NAMES = {
   0: "grass",
   1: "dirt",
@@ -46,11 +30,6 @@ const TILE_NAMES = {
   3: "water",
 };
 
-/**
- * Creates the player and associated visual elements
- * @param {THREE.Scene} scene - The Three.js scene
- * @returns {THREE.Mesh} - The player mesh
- */
 export function createPlayer(scene) {
   const size = 0.5;
   const geo = new THREE.BoxGeometry(size, size, size);
@@ -99,12 +78,6 @@ export function createPlayer(scene) {
   return player;
 }
 
-/**
- * Gets the tile index at the player's position
- * @param {THREE.Vector3} playerPos - Player position
- * @param {number} mapSize - Size of the map
- * @returns {Object} - Object with x, y, and z indices
- */
 function getPlayerTileIndex(playerPos, mapSize) {
   const half = mapSize / 2;
   const x = Math.floor(playerPos.x + half);
@@ -119,20 +92,13 @@ function getPlayerTileIndex(playerPos, mapSize) {
   };
 }
 
-/**
- * Gets the tile index in front of the player
- * @param {THREE.Vector3} playerPos - Player position
- * @param {number} rotation - Player rotation in radians
- * @param {number} mapSize - Size of the map
- * @returns {Object} - Object with x, y, and z indices
- */
 function getFrontTileIndex(playerPos, rotation, mapSize) {
   const half = mapSize / 2;
-  
+
   // Calculate position in front of player
   const frontX = playerPos.x - Math.sin(rotation);
   const frontZ = playerPos.z - Math.cos(rotation);
-  
+
   // Convert to tile indices
   const x = Math.floor(frontX + half);
   const y = 0; // Currently only working with the top layer
@@ -146,9 +112,6 @@ function getFrontTileIndex(playerPos, rotation, mapSize) {
   };
 }
 
-/**
- * Updates the preview tile material based on selected tile type
- */
 function updatePreviewMaterial() {
   if (!gameState.materials || !gameState.selectedTileType) return;
 
@@ -166,12 +129,6 @@ function updatePreviewMaterial() {
   previewTile.material = previewMaterial;
 }
 
-/**
- * Updates player movement and handles interactions
- * @param {THREE.Mesh} player - The player mesh
- * @param {Object} keys - Object tracking key states
- * @param {THREE.Camera} camera - The camera to update based on player position
- */
 export function updatePlayerMovement(player, keys, camera) {
   const speed = 0.05;
   const rotationSpeed = 0.03;
@@ -342,11 +299,6 @@ function saveMapData() {
   }, 500);
 }
 
-/**
- * Save player position with debounce
- * Called periodically during movement to track player location
- * @param {THREE.Vector3} position - Player position
- */
 function savePlayerPosition(position) {
   clearTimeout(positionSaveTimer);
   positionSaveTimer = setTimeout(() => {

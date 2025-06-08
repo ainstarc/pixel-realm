@@ -7,12 +7,6 @@ import { storage } from "../core/storage.js";
 // Constants
 const MAP_HEIGHT = 4; // Vertical layers
 
-/**
- * Generates the game world map
- * @param {THREE.Scene} scene - The Three.js scene
- * @param {number} size - Size of the map (default: 32x32)
- * @returns {Object} - Object containing mapData and tiles arrays
- */
 export function generateMap(scene, size = 32) {
   const savedMapData = getSavedMapData();
   const mapData = [];
