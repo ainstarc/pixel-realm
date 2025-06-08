@@ -1,5 +1,5 @@
-import { storage } from "../../core/storage.js";
-import { gameState } from "../../core/gameState.js";
+import { storageManager } from "../../manager/storageManager.js";
+import { stateManager } from "../../manager/stateManager.js";
 
 let saveTimer = 0;
 let positionSaveTimer = 0;
@@ -7,7 +7,7 @@ let positionSaveTimer = 0;
 export function saveMapData() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    storage.saveMapData(gameState.mapData);
+    storageManager.saveMapData(stateManager.mapData);
     console.log("Map data saved");
   }, 500);
 }
@@ -15,7 +15,7 @@ export function saveMapData() {
 export function savePlayerPosition(position) {
   clearTimeout(positionSaveTimer);
   positionSaveTimer = setTimeout(() => {
-    storage.savePlayerPosition(position);
+    storageManager.savePlayerPosition(position);
     console.log("Player position saved:", {
       x: position.x,
       y: position.y,

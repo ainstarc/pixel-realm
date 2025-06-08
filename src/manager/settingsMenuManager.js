@@ -1,11 +1,11 @@
 import {
   setupSettingsIcon,
   setupSettingsMenuContainer,
-} from "./settingsMenu/domElements.js";
-import { createResetButton } from "./settingsMenu/gameOptions.js";
-import { createControlToggle } from "./settingsMenu/controlToggle.js";
-import { createHelpButtons } from "./settingsMenu/modal.js";
-import { appendVersionInfo } from "./settingsMenu/versionInfo.js";
+} from "../ui/settingsMenu/domElements.js";
+import { createResetButton } from "../ui/settingsMenu/gameOptions.js";
+import { createControlToggle } from "../ui/settingsMenu/controlToggle.js";
+import { createHelpButtons } from "../ui/settingsMenu/modal.js";
+import { appendVersionInfo } from "../ui/settingsMenu/versionInfo.js";
 
 export function setupSettingsMenu() {
   const settingsIcon = setupSettingsIcon();

@@ -1,4 +1,4 @@
-import { keys } from "../../player/input.js";
+import { keys } from "../../manager/inputManager.js";
 import { controlsState } from "./state.js";
 
 export function createJoystickControls() {

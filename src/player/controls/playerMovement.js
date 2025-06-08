@@ -2,7 +2,7 @@ import {
   keyPressed,
   mouseMovement,
   isPointerLocked,
-} from "../input.js";
+} from "../../manager/inputManager.js";
 import {
   STRAFE_THRESHOLD,
   SPEED,
@@ -10,11 +10,11 @@ import {
   MOUSE_SENSITIVITY,
   CAM_DISTANCE,
   CAM_HEIGHT,
-} from "./playerConstants.js";
+} from "../player/playerConstants.js";
 import { handleJump } from "./playerJump.js";
-import { updateCamera } from "./playerCamera.js";
+import { updateCamera } from "../camera/playerCamera.js";
 import { handleTileInteraction } from "./playerInteraction.js";
-import { savePlayerPosition } from "./playerPersistence.js";
+import { savePlayerPosition } from "../data/playerPersistence.js";
 
 const keyPressTime = { a: 0, d: 0 };
 let playerRotation = 0;

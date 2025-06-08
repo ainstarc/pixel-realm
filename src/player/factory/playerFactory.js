@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { storage } from "../../core/storage.js";
+import { storageManager } from "../../manager/storageManager.js";
 
 let highlightBorder = null;
 let previewTile = null;
@@ -10,7 +10,7 @@ export function createPlayer(scene) {
   const mat = new THREE.MeshStandardMaterial({ color: 0xff4444 });
   const player = new THREE.Mesh(geo, mat);
 
-  const savedPosition = storage.loadPlayerPosition();
+  const savedPosition = storageManager.loadPlayerPosition();
   player.position.set(
     savedPosition?.x ?? 0,
     savedPosition?.y ?? 0.5,
@@ -39,7 +39,7 @@ export function createPlayer(scene) {
   previewTile.visible = false;
   scene.add(previewTile);
 
-  storage.savePlayerPosition(player.position);
+  storageManager.savePlayerPosition(player.position);
 
   return player;
 }

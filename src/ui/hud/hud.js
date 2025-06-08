@@ -5,7 +5,7 @@
  * Currently shows the selected tile type in the top-left corner.
  */
 
-import { gameState } from "../core/gameState.js";
+import { stateManager } from "../../manager/stateManager.js";
 
 /**
  * Sets up the HUD elements
@@ -33,7 +33,7 @@ export function setupHUD() {
   const tileDisplay = document.createElement('div');
   tileDisplay.id = 'tile-display';
   tileDisplay.className = 'ui';
-  tileDisplay.textContent = `Selected: ${capitalizeFirstLetter(gameState.selectedTileType)}`;
+  tileDisplay.textContent = `Selected: ${capitalizeFirstLetter(stateManager.selectedTileType)}`;
   
   // Add to DOM
   hudContainer.appendChild(tileDisplay);
@@ -45,7 +45,7 @@ export function setupHUD() {
      * Updates the HUD display with current game state
      */
     update() {
-      tileDisplay.textContent = `Selected: ${capitalizeFirstLetter(gameState.selectedTileType)}`;
+      tileDisplay.textContent = `Selected: ${capitalizeFirstLetter(stateManager.selectedTileType)}`;
     }
   };
 }

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { materials } from "../core/assets.js";
+import { materials } from "../../manager/assetsManager.js";
 
 export function createTile(tileType, x, size, z) {
   const tileGeo = new THREE.BoxGeometry(1, 0.5, 1);

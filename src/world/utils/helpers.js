@@ -1,7 +1,7 @@
-import { storage } from "../core/storage.js";
+import { storageManager } from "../../manager/storageManager.js";
 
 export function getSavedMapData() {
-  return storage.loadMapData();
+  return storageManager.loadMapData();
 }
 
 export function shouldRenderTile(y) {

@@ -1,4 +1,4 @@
-import { storage } from "../core/storage.js";
+import { storageManager } from "../../manager/storageManager.js";
 
 export function setupInstructions() {
   const instructions = document.createElement("div");
@@ -17,7 +17,7 @@ export function setupInstructions() {
   instructions.id = "instructions-overlay";
 
   const isTouchDevice = "ontouchstart" in window;
-  const settings = storage.loadSettings() || {};
+  const settings = storageManager.loadSettings() || {};
   const instructionsDismissed = settings.instructionsDismissed;
 
   if (isTouchDevice) {
@@ -49,8 +49,8 @@ export function setupInstructions() {
 
   function dismissInstructions() {
     instructions.style.display = "none";
-    const settings = storage.loadSettings() || {};
+    const settings = storageManager.loadSettings() || {};
     settings.instructionsDismissed = true;
-    storage.saveSettings(settings);
+    storageManager.saveSettings(settings);
   }
 }

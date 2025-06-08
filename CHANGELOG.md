@@ -1,231 +1,124 @@
 # Changelog
 
-All notable changes to Pixel Realm will be documented in this file.
+All notable changes to **Pixel Realm** will be documented here.
 
-## [0.12.6]
+---
 
-### Added
-- Improved mobile experience with automatic instructions dismissal
-- Instructions overlay now automatically dismisses after 3 seconds on mobile devices
-- Added touch input detection to dismiss instructions on first interaction
-- Implemented persistent dismissal using localStorage
+## [0.12.7] – Modularity Phase 2
 
-## [0.12.5]
+### Internal Restructure
 
-### Added
-- Improved UI interaction with pointer lock
-- Added UI detection to prevent pointer lock when interacting with menus
-- Added 'ui' class to all UI elements for proper detection
-- Cursor now stays visible when hovering over UI elements
+- 🔁 `/player` refactored into submodules: `input`, `controls`, `factory`, `camera`, `player`
+- 🧭 `/manager` layer created for all coordination logic
+- 🎮 `/loop`, `/setup/init`, `/ui` modularized cleanly by responsibility
+- 📦 `game.js` now serves as orchestrator
+- Improved separation of concerns and future scalability
 
-## [0.12.4]
+---
+
+## [0.12.6] – Mobile Instructions UX
 
 ### Added
-- Temporary cursor access with Alt key
-- Hold Alt to temporarily exit pointer lock
-- Auto re-enter pointer lock when Alt is released
-- Escape key still works for permanent pointer lock exit
 
-## [0.12.3]
+- Auto-dismiss overlay on mobile after 3 seconds or first touch
+- Persistent dismissal via `localStorage`
 
-### Added
-- Mobile joystick control option
-- Toggle in settings to switch between joystick and WASD buttons
-- Persistent control preference using localStorage
-- Updated controls modal to show relevant controls based on selected mode
+---
 
-## [0.12.2]
+## [0.12.5] – Pointer Lock and UI Focus
 
 ### Added
-- Highlighter now follows the tile in front of the player
-- Improved tile targeting for more intuitive placement
 
-## [0.12.1]
+- Prevent pointer lock when hovering UI elements
+- Cursor remains visible on UI
+- All UI marked with `.ui` class for detection
 
-### Added
-- Left mouse click now places tiles (same as 'E' key)
-- Improved mouse controls integration
+---
 
-## [0.12.0]
+## [0.12.4] – Temporary Cursor with Alt
 
 ### Added
-- Mouse movement controls for camera rotation
-- Pointer lock API integration for immersive gameplay
-- Instructions overlay for mouse controls
-- Improved A/D keys to work as strafe when mouse look is active
+
+- Hold `Alt` to exit pointer lock temporarily
+- Auto re-lock on Alt release
+- `Escape` still exits pointer lock fully
+
+---
+
+## [0.12.3] – Mobile Joystick Toggle
+
+### Added
+
+- Joystick/WASD toggle in settings (mobile)
+- Control preference saved with `localStorage`
+- Context-sensitive controls in Help modal
+
+---
+
+## [0.12.2–0.12.1] – Intuitive Mouse Controls
+
+### Added
+
+- Left-click now places tile (same as `E`)
+- Highlight tracks the tile in front of the player
+
+---
+
+## [0.12.0] – Mouse Look + Modularity Phase 1
+
+### Added
+
+- Pointer Lock API for immersive mouse control
+- Mouse camera rotation and smart strafe logic
+- Instructions overlay for desktop users
+- Modularization:
+  - 🧱 `/core/state` for state separation
+  - 🧱 `/core/storage` refactor for localStorage logic
 
 ### Removed
-- Removed PWA and service worker functionality
-- Simplified package dependencies
 
-## [0.11.0]
+- PWA and service worker logic for simplicity
+
+---
+
+## [0.11.0 → 0.10.0] – Core Gameplay Foundation
 
 ### Added
-- Enhanced settings menu with organized sections
-- Controls modal with game instructions
-- Version information display
-- Fixed asset paths for GitHub Pages deployment
+
+- Voxel map, player movement, tile placement/editing
+- LocalStorage-based persistence for player/world state
+- Settings modal with controls/help/version
+- GitHub Pages asset path fixes
+- Responsive viewport improvements
 
 ### Fixed
-- Corrected path handling for GitHub Pages deployment
-- Improved mobile experience with proper viewport settings
 
-## [0.10.1]
+- Position persistence bugs
+- Debug logs for save/load reliability
 
-### Fixed
-- Fixed key press detection for A/D keys to properly handle rotation and strafing
-- Moved key press tracking variables outside the update function to persist between frames
+---
 
-## [0.10.0]
+## [0.9.0 → 0.6.0] – Engine & UX Refinements (Grouped)
 
-### Added
-- Initial release with basic voxel world functionality
-- Player movement and camera controls
-- Tile placement and editing
-- Persistent world and player position
+### Highlights
 
-### Fixed
-- Fixed player position not being saved between sessions
-- Added immediate position save on player creation
-- Added debug logging for position saving/loading
-- Ensured player position persistence works correctly
+- 3D world layering with height support
+- HUD added with tile selection (1–4)
+- Jump physics refined (velocity, gravity)
+- Joystick/touch controls for mobile
+- Settings menu + reset & report options
+- GitHub Pages deployment, Actions CI/CD
+- Persistent tile types and preview rendering
+- Comprehensive documentation via README and JSDoc
+- Improved UI structure and event handling
 
-## [0.9.0]
+---
 
-### Added
-- Converted world map to 3D voxel grid structure
-- Added support for vertical layers (height) in the world
-- Updated world generation to create underground layers
-- Modified tile rendering to support the 3D structure
-- Updated player interaction to work with 3D coordinates
-
-## [0.7.4]
-
-### Changed
-- Reduced gravity to make jump falls less abrupt
-- Fine-tuned jump physics for a more natural feel
-
-## [0.7.3]
-
-### Fixed
-- Fixed Place button not working on mobile devices
-- Improved jumping mechanics with proper physics-based system
-- Added jump velocity and gravity for more natural movement
-- Enhanced mobile controls with better action button handling
-
-## [0.7.2]
-
-### Fixed
-- Fixed 404 errors when loading textures on GitHub Pages
-- Updated texture paths to use public folder structure
-- Simplified asset loading for better compatibility with Vite builds
-
-## [0.7.1]
-
-### Fixed
-- Fixed black screen issue when deploying to GitHub Pages
-- Added proper base path configuration in Vite
-- Updated asset loading to use correct paths in deployment
-- Added error handling for texture loading
-- Improved debugging information for deployment issues
-
-## [0.7.0]
+## [0.5.0 → 0.1.0] – Early Milestones
 
 ### Added
-- Settings menu with gear icon in top-right corner
-- Reset World option in settings menu
-- Report Issue button that links to GitHub issues
-- Placeholder button for future features
-- Improved UI organization
 
-### Changed
-- Moved reset functionality from bottom button to settings menu
-- Enhanced UI styling for better visibility
-
-## [0.6.3]
-
-### Fixed
-- Fixed "non-passive event listener" warning in mobile controls
-- Added explicit { passive: false } option to touch event listeners
-- Prevented page scrolling when using mobile controls
-
-## [0.6.2]
-
-### Added
-- Comprehensive documentation for all core modules
-- Expanded README with detailed persistence information
-- JSDoc comments for better code readability
-
-### Fixed
-- Clarified player position saving mechanism
-- Improved error handling in storage operations
-
-## [0.6.1]
-
-### Fixed
-- Fixed persistence for all tile types (grass, dirt, sand, water)
-- Added proper tile type mapping system
-- Ensured consistent material application on reload
-
-## [0.6.0]
-
-### Added
-- GitHub Actions workflow for automatic deployment
-- Live demo on GitHub Pages
-- Updated README with comprehensive documentation
-- Development and build instructions
-
-## [0.5.0]
-
-### Added
-- Tile placement preview system
-- Semi-transparent preview of selected tile under player
-- Real-time preview updates as player moves
-- Preview uses actual tile material with transparency
-
-## [0.4.0]
-
-### Added
-- HUD display showing currently selected tile type
-- Multiple tile type selection (press 1-4 to select different tiles)
-- Support for additional tile types (grass, dirt, sand, water)
-- Mobile tile selection buttons
-
-### Changed
-- Improved tile placement to use selected tile type
-- Renamed all "mud" references to "dirt" for consistency
-
-## [0.3.0]
-
-### Added
-- Mobile touch controls for movement and actions
-- Expanded localStorage functionality
-  - Save player position
-  - Save game settings
-- Comprehensive README with documentation
-- Dedicated changelog file
-
-### Changed
-- Improved UI controls positioning
-- Better touch detection for mobile devices
-
-## [0.2.0]
-
-### Added
-- Persistent storage using localStorage
-- Tile highlighting with yellow border
-- Reset world functionality
-
-### Fixed
-- Key press detection for tile toggling
-- Error when accessing undefined map data
-- Tile material reference issues
-
-## [0.1.0]
-
-### Added
-- Initial release
-- Basic 3D world generation with Three.js
-- Player movement with WASD and arrow keys
-- Tile toggling between grass and mud
-- Basic physics (gravity, jumping, boundaries)
+- Basic Three.js world, movement, tile toggling
+- Gravity, boundaries, highlight system
+- Initial mobile touch support and controls
+- storageManager using `localStorage`

@@ -1,4 +1,4 @@
-import { GRAVITY, JUMP_STRENGTH } from "./playerConstants.js";
+import { GRAVITY, JUMP_STRENGTH } from "../player/playerConstants.js";
 
 let isJumping = false;
 let jumpVelocity = 0;

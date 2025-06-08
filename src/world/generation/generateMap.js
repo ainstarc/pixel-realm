@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { TILE_NAMES } from "../player/player.js";
-import { getSavedMapData, shouldRenderTile, getTileType } from "./helpers.js";
-import { createTile } from "./tileFactory.js";
-import { storage } from "../core/storage.js";
+import { TILE_NAMES } from "../../manager/playerManager.js";
+import { getSavedMapData, shouldRenderTile, getTileType } from "../utils/helpers.js";
+import { createTile } from "../tiles/tileFactory.js";
+import { storageManager } from "../../manager/storageManager.js";
 
 // Constants
 const MAP_HEIGHT = 4; // Vertical layers
@@ -37,7 +37,7 @@ export function generateMap(scene, size = 32) {
   }
 
   if (!savedMapData) {
-    storage.saveMapData(mapData);
+    storageManager.saveMapData(mapData);
   }
 
   return { mapData, tiles };

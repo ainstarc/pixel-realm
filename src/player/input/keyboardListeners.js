@@ -1,4 +1,4 @@
-import { gameState } from "../../core/gameState.js";
+import { stateManager } from "../../manager/stateManager.js";
 import {
   keys,
   keyPressed,
@@ -23,7 +23,7 @@ export function setupKeyboardListeners() {
       };
 
       if (tileMap[key]) {
-        gameState.selectedTileType = tileMap[key];
+        stateManager.selectedTileType = tileMap[key];
       }
     }
 

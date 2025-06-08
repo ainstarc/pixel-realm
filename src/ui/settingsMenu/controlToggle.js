@@ -1,8 +1,8 @@
-import { storage } from "../../core/storage.js";
-import { toggleControlType } from "../mobileControls.js";
+import { storageManager } from "../../manager/storageManager.js";
+import { toggleControlType } from "../../manager/mobileControlsManager.js";
 
 export function createControlToggle() {
-  const settings = storage.loadSettings() || {};
+  const settings = storageManager.loadSettings() || {};
   const useJoystick = settings.useJoystick || false;
 
   const toggleContainer = document.createElement("div");

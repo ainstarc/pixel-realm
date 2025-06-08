@@ -1,4 +1,4 @@
-import { storage } from "../../core/storage.js";
+import { storageManager } from "../../manager/storageManager.js";
 import { createMenuButton } from "./menuButton.js";
 
 export function createHelpButtons() {
@@ -60,7 +60,7 @@ export function showControlsModal() {
   });
 
   const controlsList = document.createElement("div");
-  const settings = storage.loadSettings() || {};
+  const settings = storageManager.loadSettings() || {};
   const useJoystick = settings.useJoystick || false;
 
   if ('ontouchstart' in window) {

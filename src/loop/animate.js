@@ -1,12 +1,12 @@
-import { updatePlayerMovement } from "../player/player.js";
-import { keys, resetPressedKeys } from "../player/input.js";
-import { gameState } from "../core/gameState.js";
+import { updatePlayerMovement } from "../manager/playerManager.js";
+import { keys, resetPressedKeys } from "../manager/inputManager.js";
+import { stateManager } from "../manager/stateManager.js";
 
 export function startGameLoop(camera, scene, renderer) {
   function animate() {
     requestAnimationFrame(animate);
-    updatePlayerMovement(gameState.player, keys, camera);
-    gameState.hud.update();
+    updatePlayerMovement(stateManager.player, keys, camera);
+    stateManager.hud.update();
     renderer.render(scene, camera);
     resetPressedKeys();
   }

@@ -1,16 +1,16 @@
-import { createButtonControls } from "./mobileControls/buttons.js";
+import { createButtonControls } from "../ui/mobileControls/buttons.js";
 import {
   createJoystickControls,
   resetJoystickKeys,
-} from "./mobileControls/joystick.js";
-import { createActionButtons } from "./mobileControls/actions.js";
-import { controlsState } from ".//mobileControls/state.js";
-import { storage } from "../core/storage.js";
+} from "../ui/mobileControls/joystick.js";
+import { createActionButtons } from "../ui/mobileControls/actions.js";
+import { controlsState } from "../ui/mobileControls/state.js";
+import { storageManager } from "./storageManager.js";
 
 export function setupMobileControls() {
   if (!("ontouchstart" in window)) return;
 
-  const settings = storage.loadSettings() || {};
+  const settings = storageManager.loadSettings() || {};
   controlsState.useJoystick = settings.useJoystick || false;
 
   const controlsDiv = document.createElement("div");
@@ -51,9 +51,9 @@ export function toggleControlType(useJoystickControls) {
 
   controlsState.useJoystick = useJoystickControls;
 
-  const settings = storage.loadSettings() || {};
+  const settings = storageManager.loadSettings() || {};
   settings.useJoystick = useJoystickControls;
-  storage.saveSettings(settings);
+  storageManager.saveSettings(settings);
 
   const currentControl = controlsDiv.firstChild;
   if (currentControl) controlsDiv.removeChild(currentControl);

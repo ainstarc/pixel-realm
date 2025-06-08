@@ -1,5 +1,5 @@
-import { keys, keyPressed } from "../../player/input.js";
-import { gameState } from "../../core/gameState.js";
+import { keys, keyPressed } from "../../manager/inputManager.js";
+import { stateManager } from "../../manager/stateManager.js";
 
 export function createActionButtons() {
   const actionDiv = document.createElement("div");
@@ -84,7 +84,7 @@ function createTileButton(tileType) {
     "touchstart",
     (e) => {
       e.preventDefault();
-      gameState.selectedTileType = tileType;
+      stateManager.selectedTileType = tileType;
     },
     { passive: false }
   );

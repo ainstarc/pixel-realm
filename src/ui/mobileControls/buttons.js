@@ -1,4 +1,4 @@
-import { keys } from "../../player/input.js";
+import { keys } from "../../manager/inputManager.js";
 
 export function createButtonControls() {
   const buttonsDiv = document.createElement("div");
