@@ -1,11 +1,11 @@
 /**
  * Game state persistence using localStorage
- * 
+ *
  * This module handles saving and loading game state data including:
  * - Map data (tile types and positions)
  * - Player position (x, y, z coordinates)
  * - Game settings
- * 
+ *
  * Data is automatically saved during gameplay:
  * - Map data is saved when tiles are modified
  * - Player position is saved periodically during movement
@@ -19,9 +19,9 @@ export const storage = {
    */
   saveMapData(mapData) {
     try {
-      localStorage.setItem('pixel-realm-map', JSON.stringify(mapData));
+      localStorage.setItem("pixel-realm-map", JSON.stringify(mapData));
     } catch (e) {
-      console.error('Failed to save map data:', e);
+      console.error("Failed to save map data:", e);
     }
   },
 
@@ -31,10 +31,10 @@ export const storage = {
    */
   loadMapData() {
     try {
-      const savedData = localStorage.getItem('pixel-realm-map');
+      const savedData = localStorage.getItem("pixel-realm-map");
       return savedData ? JSON.parse(savedData) : null;
     } catch (e) {
-      console.error('Failed to load map data:', e);
+      console.error("Failed to load map data:", e);
       return null;
     }
   },
@@ -45,13 +45,16 @@ export const storage = {
    */
   savePlayerPosition(position) {
     try {
-      localStorage.setItem('pixel-realm-player', JSON.stringify({
-        x: position.x,
-        y: position.y,
-        z: position.z
-      }));
+      localStorage.setItem(
+        "pixel-realm-player",
+        JSON.stringify({
+          x: position.x,
+          y: position.y,
+          z: position.z,
+        })
+      );
     } catch (e) {
-      console.error('Failed to save player position:', e);
+      console.error("Failed to save player position:", e);
     }
   },
 
@@ -61,10 +64,10 @@ export const storage = {
    */
   loadPlayerPosition() {
     try {
-      const savedPos = localStorage.getItem('pixel-realm-player');
+      const savedPos = localStorage.getItem("pixel-realm-player");
       return savedPos ? JSON.parse(savedPos) : null;
     } catch (e) {
-      console.error('Failed to load player position:', e);
+      console.error("Failed to load player position:", e);
       return null;
     }
   },
@@ -75,9 +78,9 @@ export const storage = {
    */
   saveSettings(settings) {
     try {
-      localStorage.setItem('pixel-realm-settings', JSON.stringify(settings));
+      localStorage.setItem("pixel-realm-settings", JSON.stringify(settings));
     } catch (e) {
-      console.error('Failed to save settings:', e);
+      console.error("Failed to save settings:", e);
     }
   },
 
@@ -87,10 +90,10 @@ export const storage = {
    */
   loadSettings() {
     try {
-      const savedSettings = localStorage.getItem('pixel-realm-settings');
+      const savedSettings = localStorage.getItem("pixel-realm-settings");
       return savedSettings ? JSON.parse(savedSettings) : null;
     } catch (e) {
-      console.error('Failed to load settings:', e);
+      console.error("Failed to load settings:", e);
       return null;
     }
   },
@@ -100,11 +103,11 @@ export const storage = {
    */
   clearSavedData() {
     try {
-      localStorage.removeItem('pixel-realm-map');
-      localStorage.removeItem('pixel-realm-player');
-      localStorage.removeItem('pixel-realm-settings');
+      localStorage.removeItem("pixel-realm-map");
+      localStorage.removeItem("pixel-realm-player");
+      localStorage.removeItem("pixel-realm-settings");
     } catch (e) {
-      console.error('Failed to clear saved data:', e);
+      console.error("Failed to clear saved data:", e);
     }
-  }
+  },
 };

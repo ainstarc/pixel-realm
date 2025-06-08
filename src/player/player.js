@@ -178,8 +178,8 @@ export function updatePlayerMovement(player, keys, camera) {
   const mouseSensitivity = 0.002;
   const gravity = 0.005; // Reduced gravity for slower fall
   const jumpStrength = 0.15;
-  const camDistance = 2;
-  const camHeight = 1;
+  const camDistance = 3;
+  const camHeight = 2;
 
   const nextPos = player.position.clone();
 
