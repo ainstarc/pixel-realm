@@ -1,40 +1,32 @@
-import { Renderer } from "./Renderer";
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export class SceneManager {
-  private renderer: Renderer;
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
 
-  constructor(renderer: Renderer) {
-    this.renderer = renderer;
+  constructor(private renderer: { getDomElement(): HTMLElement; resize(): void }) {
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   }
 
-  public init() {
-    this.camera.position.set(0, 10, 10);
-    this.camera.lookAt(0, 0, 0);
+  public init(): void {
+    this.camera.position.set(8, 8, 20);
+    window.addEventListener('resize', () => this.renderer.resize());
   }
 
-  public update() {
-    // Future system updates
-  }
-
-  public render() {
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  public getScene() {
+  public getScene(): THREE.Scene {
     return this.scene;
   }
 
-  public getCamera() {
+  public getCamera(): THREE.PerspectiveCamera {
     return this.camera;
+  }
+
+  public update(): void {
+    // Any global scene logic per frame (skybox, environment, etc)
+  }
+
+  public render(): void {
+    (this.renderer as any).renderer.render(this.scene, this.camera);
   }
 }

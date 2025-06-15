@@ -1,23 +1,18 @@
-import { PlayerController } from '../../systems/player/control/PlayerController';
-import { MovementSystem } from '../../systems/player/movement/MovementSystem';
 import { InputManager } from '../InputManager';
+import { PlayerController } from '../../systems/player/control/PlayerController';
 
 export class PCControls {
-  private input: InputManager;
-  private controller: PlayerController;
-  private movement: MovementSystem;
+  constructor(
+    private input: InputManager,
+    private player: PlayerController
+  ) {}
 
-  constructor(input: InputManager, controller: PlayerController, movement: MovementSystem) {
-    this.input = input;
-    this.controller = controller;
-    this.movement = movement;
-  }
+  public update(): void {
+    const speed = 0.1;
 
-  public update() {
-    if (this.input.isKeyPressed('w')) this.controller.moveForward();
-    if (this.input.isKeyPressed('s')) this.controller.moveBackward();
-    if (this.input.isKeyPressed('a')) this.controller.moveLeft();
-    if (this.input.isKeyPressed('d')) this.controller.moveRight();
-    if (this.input.isKeyPressed(' ')) this.movement.jump();
+    if (this.input.isKeyPressed('w')) this.player.moveForward(speed);
+    if (this.input.isKeyPressed('s')) this.player.moveBackward(speed);
+    if (this.input.isKeyPressed('a')) this.player.moveLeft(speed);
+    if (this.input.isKeyPressed('d')) this.player.moveRight(speed);
   }
 }

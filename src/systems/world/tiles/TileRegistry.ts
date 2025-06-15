@@ -3,14 +3,11 @@ import { Tile } from './Tile';
 export class TileRegistry {
   private static tiles: Map<string, Tile> = new Map();
 
-  public static registerTile(id: string, texture: string) {
-    const tile = new Tile(id, texture);
-    TileRegistry.tiles.set(id, tile);
+  public static registerTile(id: string, texture: string): void {
+    this.tiles.set(id, { id, texture });
   }
 
-  public static getTile(id: string): Tile {
-    const tile = TileRegistry.tiles.get(id);
-    if (!tile) throw new Error(`Tile not found: ${id}`);
-    return tile;
+  public static getTile(id: string): Tile | undefined {
+    return this.tiles.get(id);
   }
 }

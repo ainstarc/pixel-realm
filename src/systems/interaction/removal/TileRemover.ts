@@ -1,8 +1,7 @@
-import * as THREE from 'three';
+import { Chunk } from '../../world/chunk/Chunk';
 
 export class TileRemover {
-  public removeTile(position: THREE.Vector3) {
-    // Future: logic to remove tile from world data structure
-    console.log(`Removed tile at`, position);
+  public removeTile(chunk: Chunk, x: number, y: number, z: number): void {
+    chunk.setTile(x, y, z, null);
   }
 }

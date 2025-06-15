@@ -1,22 +1,23 @@
 import { Chunk } from './Chunk';
-import { Tile } from '../tiles/Tile';
 import { TileRegistry } from '../tiles/TileRegistry';
 
 export class ChunkBuilder {
-  private size: number;
+  private chunkSize: number;
 
-  constructor(size: number) {
-    this.size = size;
+  constructor(chunkSize: number) {
+    this.chunkSize = chunkSize;
   }
 
-  public generateChunk(x: number, y: number, z: number): Chunk {
-    const chunk = new Chunk(x, y, z, this.size);
-    const dirtTile = TileRegistry.getTile('dirt');
+  public build(position: { x: number; y: number; z: number }): Chunk {
+    const chunk = new Chunk(position, this.chunkSize);
 
-    for (let i = 0; i < this.size; i++) {
-      for (let j = 0; j < this.size; j++) {
-        for (let k = 0; k < this.size; k++) {
-          chunk.setTile(i, j, k, dirtTile);
+    for (let x = 0; x < this.chunkSize; x++) {
+      for (let y = 0; y < this.chunkSize; y++) {
+        for (let z = 0; z < this.chunkSize; z++) {
+          const tile = TileRegistry.getTile('grass');
+          if (tile) {
+            chunk.setTile(x, y, z, tile);
+          }
         }
       }
     }

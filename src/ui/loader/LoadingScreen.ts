@@ -1,14 +1,14 @@
 export class LoadingScreen {
-  private container: HTMLElement;
+  private overlay: HTMLElement;
 
   constructor() {
-    this.container = document.createElement('div');
-    this.container.className = 'loadingScreen';
-    this.container.innerHTML = `<p>Loading Pixel Realm...</p>`;
-    document.body.appendChild(this.container);
+    this.overlay = document.createElement('div');
+    this.overlay.className = 'loading-screen';
+    this.overlay.innerText = 'Loading...';
+    document.body.appendChild(this.overlay);
   }
 
-  public hide() {
-    this.container.style.display = 'none';
+  public hide(): void {
+    this.overlay.style.display = 'none';
   }
 }

@@ -2,25 +2,14 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
     "strict": true,
-    "jsx": "preserve",
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    "moduleResolution": "Node",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "baseUrl": "./src",
-    "paths": {
-      "@app/*": ["app/*"],
-      "@engine/*": ["engine/*"],
-      "@systems/*": ["systems/*"],
-      "@input/*": ["input/*"],
-      "@ui/*": ["ui/*"],
-      "@shared/*": ["shared/*"]
-    }
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "skipLibCheck": true
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src"]
 }

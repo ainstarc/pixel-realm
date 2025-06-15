@@ -3,18 +3,15 @@ export class SettingsMenu {
 
   constructor() {
     this.container = document.createElement('div');
-    this.container.className = 'settingsMenu';
+    this.container.className = 'settings-menu';
     this.container.innerHTML = `
-      <button id="clearStorageBtn">Clear Storage</button>
+      <button id="clear-save">Clear Save</button>
     `;
     document.body.appendChild(this.container);
 
-    const clearBtn = document.getElementById('clearStorageBtn');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        localStorage.clear();
-        alert('Storage Cleared!');
-      });
-    }
+    document.getElementById('clear-save')?.addEventListener('click', () => {
+      localStorage.clear();
+      location.reload();
+    });
   }
 }

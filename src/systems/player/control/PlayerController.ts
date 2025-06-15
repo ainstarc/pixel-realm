@@ -1,26 +1,21 @@
 import { PlayerState } from '../state/PlayerState';
 
 export class PlayerController {
-  private state: PlayerState;
-  private speed: number = 0.1;
+  constructor(private state: PlayerState) {}
 
-  constructor(state: PlayerState) {
-    this.state = state;
+  public moveForward(amount: number): void {
+    this.state.position.z -= amount;
   }
 
-  public moveForward() {
-    this.state.position.z -= this.speed;
+  public moveBackward(amount: number): void {
+    this.state.position.z += amount;
   }
 
-  public moveBackward() {
-    this.state.position.z += this.speed;
+  public moveLeft(amount: number): void {
+    this.state.position.x -= amount;
   }
 
-  public moveLeft() {
-    this.state.position.x -= this.speed;
-  }
-
-  public moveRight() {
-    this.state.position.x += this.speed;
+  public moveRight(amount: number): void {
+    this.state.position.x += amount;
   }
 }

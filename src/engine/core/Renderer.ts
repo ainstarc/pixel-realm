@@ -1,23 +1,23 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export class Renderer {
-  private renderer: THREE.WebGLRenderer;
+  public renderer: THREE.WebGLRenderer;
 
   constructor() {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
+  }
+
+  public init(): void {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(this.renderer.domElement);
-
-    window.addEventListener("resize", () => {
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    });
   }
 
-  public init() {
-    this.renderer.setClearColor(0x87ceeb); // Sky blue
+  public getDomElement(): HTMLElement {
+    return this.renderer.domElement;
   }
 
-  public render(scene: THREE.Scene, camera: THREE.Camera) {
-    this.renderer.render(scene, camera);
+  public resize(): void {
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }

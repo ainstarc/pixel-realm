@@ -3,17 +3,13 @@ export class MobileControlsUI {
 
   constructor() {
     this.container = document.createElement('div');
-    this.container.className = 'mobileControls';
+    this.container.className = 'mobile-controls';
     this.container.innerHTML = `
-      <div class="dpad">
-        <button id="up">↑</button>
-        <button id="down">↓</button>
-        <button id="left">←</button>
-        <button id="right">→</button>
-      </div>
+      <button id="move-up">↑</button>
+      <button id="move-left">←</button>
+      <button id="move-right">→</button>
+      <button id="move-down">↓</button>
     `;
     document.body.appendChild(this.container);
-
-    // Future: hook up with mobile input system
   }
 }

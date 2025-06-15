@@ -1,9 +1,8 @@
-import * as THREE from 'three';
+import { Chunk } from '../../world/chunk/Chunk';
 import { Tile } from '../../world/tiles/Tile';
 
 export class TilePlacer {
-  public placeTile(position: THREE.Vector3, tile: Tile) {
-    // Future: logic to add tile to world data structure
-    console.log(`Placed tile ${tile.id} at`, position);
+  public placeTile(chunk: Chunk, x: number, y: number, z: number, tile: Tile): void {
+    chunk.setTile(x, y, z, tile);
   }
 }

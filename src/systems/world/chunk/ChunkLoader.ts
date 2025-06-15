@@ -1,6 +1,6 @@
 import { WorldState } from '../state/WorldState';
-import { ChunkBuilder } from './ChunkBuilder';
 import { Chunk } from './Chunk';
+import { ChunkBuilder } from './ChunkBuilder';
 
 export class ChunkLoader {
   private world: WorldState;
@@ -11,8 +11,8 @@ export class ChunkLoader {
     this.builder = builder;
   }
 
-  public loadInitialChunks() {
-    const chunk = this.builder.generateChunk(0, 0, 0);
+  public loadInitialChunks(): void {
+    const chunk = this.builder.build({ x: 0, y: 0, z: 0 });
     this.world.addChunk(chunk);
   }
 }
