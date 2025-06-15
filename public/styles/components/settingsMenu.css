@@ -1,0 +1,15 @@
+.settingsMenu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  z-index: 10;
+}
+
+.settingsMenu button {
+  background: #ff4444;
+  color: white;
+}

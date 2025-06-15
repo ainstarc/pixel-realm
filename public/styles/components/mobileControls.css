@@ -1,0 +1,20 @@
+.mobileControls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.dpad {
+  display: grid;
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  gap: 5px;
+}
+
+#up { grid-area: up; }
+#down { grid-area: down; }
+#left { grid-area: left; }
+#right { grid-area: right; }
