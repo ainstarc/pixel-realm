@@ -1,3 +1,4 @@
+// Saves and loads map data to/from localStorage
 export function saveMapData(mapData) {
   try {
     localStorage.setItem("pixel-realm-map", JSON.stringify(mapData));

@@ -1,3 +1,4 @@
+// Saves and loads player position to/from localStorage
 export function savePlayerPosition(position) {
   try {
     localStorage.setItem(

@@ -1,30 +1,33 @@
+// Sets up the Three.js scene, camera, renderer, and lighting
 import * as THREE from "three";
 
 // Scene setup
 export const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xaee9a7);
 
+// Camera rotation state
 export const cameraRotation = {
-    pitch: 0
-}
+  pitch: 0,
+};
 export const maxCameraPitch = Math.PI / 2 - 0.1; // Limit pitch to prevent flipping
 
 // Camera setup
 export const playerCamera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
 );
 playerCamera.position.set(0, 0, 0); // Initial camera position
 
+// Camera group for easier movement
 export const playerCameraGroup = new THREE.Object3D();
 
 playerCameraGroup.add(playerCamera);
 scene.add(playerCameraGroup);
 
 // Renderer setup
-export const renderer = new THREE.WebGLRenderer({antialias: true});
+export const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 

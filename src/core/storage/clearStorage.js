@@ -1,3 +1,4 @@
+// Removes all saved game data from localStorage
 export function clearSavedData() {
   try {
     localStorage.removeItem("pixel-realm-map");
