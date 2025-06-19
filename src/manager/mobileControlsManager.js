@@ -5,11 +5,25 @@ import {
 } from "../ui/mobileControls/joystick.js";
 import { createActionButtons } from "../ui/mobileControls/actions.js";
 import { controlsState } from "../ui/mobileControls/state.js";
-import {setupLookDragArea } from "../ui/mobileControls/lookDrag.js";
+import {
+  setupLookDragArea,
+  removeLookDragArea,
+} from "../ui/mobileControls/lookDrag.js";
 import { storageManager } from "./storageManager.js";
+
+// Remove any existing mobile controls and look drag area
+function cleanupMobileControls() {
+  if (controlsState.controlsDiv && controlsState.controlsDiv.parentNode) {
+    controlsState.controlsDiv.parentNode.removeChild(controlsState.controlsDiv);
+    controlsState.controlsDiv = null;
+  }
+  removeLookDragArea && removeLookDragArea();
+}
 
 export function setupMobileControls() {
   if (!("ontouchstart" in window)) return;
+
+  cleanupMobileControls(); // Clean up before creating new controls
 
   const settings = storageManager.loadSettings() || {};
   controlsState.useJoystick = settings.useJoystick || false;
@@ -25,6 +39,7 @@ export function setupMobileControls() {
     justifyContent: "space-between",
     padding: "0 20px",
     boxSizing: "border-box",
+    zIndex: 1000,
   });
 
   controlsState.controlsDiv = controlsDiv;
@@ -57,6 +72,7 @@ export function toggleControlType(useJoystickControls) {
   settings.useJoystick = useJoystickControls;
   storageManager.saveSettings(settings);
 
+  // Remove the current control (joystick or buttons)
   const currentControl = controlsDiv.firstChild;
   if (currentControl) controlsDiv.removeChild(currentControl);
   controlsDiv.insertBefore(

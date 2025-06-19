@@ -1,6 +1,7 @@
 import { keys } from "../../manager/inputManager.js";
 import { controlsState } from "./state.js";
 
+// Create the joystick controls and set up event listeners
 export function createJoystickControls() {
   const joystickDiv = document.createElement("div");
   Object.assign(joystickDiv.style, {
@@ -10,6 +11,7 @@ export function createJoystickControls() {
     backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: "60px",
     marginBottom: "20px",
+    touchAction: "none",
   });
 
   const handle = document.createElement("div");
@@ -27,6 +29,7 @@ export function createJoystickControls() {
   joystickDiv.appendChild(handle);
 
   controlsState.joystickHandle = handle;
+  controlsState.joystickDiv = joystickDiv; // Ensure this is set before event handlers
 
   joystickDiv.addEventListener("touchstart", handleJoystickStart, {
     passive: false,
@@ -41,6 +44,7 @@ export function createJoystickControls() {
   return joystickDiv;
 }
 
+// Reset all joystick keys to false
 export function resetJoystickKeys() {
   keys.w = false;
   keys.a = false;
@@ -48,6 +52,7 @@ export function resetJoystickKeys() {
   keys.d = false;
 }
 
+// Handle the start of a joystick touch
 function handleJoystickStart(e) {
   const touch = e.touches[0];
   const rect = controlsState.joystickDiv.getBoundingClientRect();
@@ -59,6 +64,7 @@ function handleJoystickStart(e) {
   controlsState.joystickActive = true;
 }
 
+// Handle joystick movement and update key states
 function handleJoystickMove(e) {
   if (!controlsState.joystickActive) return;
   const touch = e.touches[0];
@@ -79,6 +85,7 @@ function handleJoystickMove(e) {
   keys.d = x > 10;
 }
 
+// Handle the end of a joystick touch
 function handleJoystickEnd(e) {
   controlsState.joystickActive = false;
   controlsState.joystickHandle.style.transform = "translate(0, 0)";

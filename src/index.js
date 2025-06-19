@@ -1,2 +1,2 @@
-// Import main to execute it
-import './game.js';
+// Entry point: imports and runs the main game logic
+import "./game.js";

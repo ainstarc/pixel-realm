@@ -1,3 +1,4 @@
+// Saves and loads game settings to/from localStorage
 export function saveSettings(settings) {
   try {
     localStorage.setItem("pixel-realm-settings", JSON.stringify(settings));
